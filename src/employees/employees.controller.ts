@@ -9,8 +9,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
-// import { CreateEmployeeDto } from './dto/create-employee.dto';
-// import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { Prisma } from '@prisma/client';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
 

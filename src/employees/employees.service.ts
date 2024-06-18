@@ -1,29 +1,47 @@
 import { Injectable } from '@nestjs/common';
-// import { CreateEmployeeDto } from './dto/create-employee.dto';
-// import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { Prisma } from '@prisma/client';
-import { DatabaseService } from 'src/database/database.service';
+import { DatabaseService } from '../database/database.service';
+// import { Logger } from '@nestjs/common';
+// import { PinoLogger, InjectPinoLogger } from 'nestjs-pino';
 
 @Injectable()
 export class EmployeesService {
-  constructor(private readonly databaseSevice: DatabaseService) {}
+  // private readonly logger = new Logger(EmployeesService.name);
+
+  constructor(
+    private readonly databaseService: DatabaseService,
+    // @InjectPinoLogger(EmployeesService.name)
+    // private readonly logger: PinoLogger,
+  ) {}
+
   async create(createEmployeeDto: Prisma.EmployeeCreateInput) {
-    return this.databaseSevice.employee.create({
+    return this.databaseService.employee.create({
       data: createEmployeeDto,
     });
   }
 
   async findAll(role?: 'INTERN' | 'ADMIN' | 'ENGINEER') {
-    if (role) return this.databaseSevice.employee.findMany({ where: { role } });
-    return this.databaseSevice.employee.findMany();
+    // this.logger.warn({ foo: 'bar' }, 'baz %s', 'qux');
+    // this.logger.error('foo %s %o', 'bar', { baz: 'qux' });
+    // this.logger.info('foo');
+    // this.logger.debug('kdfjhdjmk');
+    // this.logger.trace('hhnnnhdjmk');
+    // this.logger.fatal(
+    //   { id: `retrieve-all-pokemon-error` },
+    //   `Retrieve all Pokemon`,
+    // ); // object passed in first argument
+
+    if (role)
+      return this.databaseService.employee.findMany({ where: { role } });
+    return this.databaseService.employee.findMany();
   }
 
   async findOne(id: number) {
-    return this.databaseSevice.employee.findUnique({ where: { id } });
+    return this.databaseService.employee.findUnique({ where: { id } });
   }
 
   async update(id: number, updateEmployeeDto: Prisma.EmployeeUpdateInput) {
-    return this.databaseSevice.employee.update({
+    return this.databaseService.employee.update({
       where: {
         id,
       },
@@ -32,6 +50,6 @@ export class EmployeesService {
   }
 
   async remove(id: number) {
-    return this.databaseSevice.employee.delete({ where: { id } });
+    return this.databaseService.employee.delete({ where: { id } });
   }
 }

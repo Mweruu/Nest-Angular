@@ -6,12 +6,20 @@ import { DatabaseModule } from './database/database.module';
 import { EmployeesModule } from './employees/employees.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
     UsersModule,
     DatabaseModule,
     EmployeesModule,
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+        },
+      },
+    }),
     ThrottlerModule.forRoot([
       { name: 'short', ttl: 1000, limit: 3 },
       { name: 'long', ttl: 60000, limit: 100 },
