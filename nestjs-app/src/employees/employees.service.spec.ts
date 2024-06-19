@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmployeesService } from './employees.service';
 import { DatabaseService } from '../database/database.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, Role } from '@prisma/client';
 describe('EmployeesService', () => {
   let service: EmployeesService;
   const mockDatabaseService = {
@@ -27,11 +27,9 @@ describe('EmployeesService', () => {
 
     service = module.get<EmployeesService>(EmployeesService);
   });
-
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-
   describe('EmployeesCreateService', () => {
     it('should have a typeof function', () => {
       expect(typeof service.create).toBe('function');
@@ -51,9 +49,9 @@ describe('EmployeesService', () => {
         data: newUser,
       });
       expect(result).toEqual(newUser);
+      expect(mockDatabaseService.employee.create).toHaveBeenCalled();
     });
   });
-
   describe('EmployeesUpdateService', () => {
     const updatedUser = {
       id: 1,
@@ -71,12 +69,12 @@ describe('EmployeesService', () => {
         1,
         updatedUser as Prisma.EmployeeCreateInput,
       );
-      console.log(response);
       expect(mockDatabaseService.employee.update).toHaveBeenCalledWith({
         where: { id: 1 },
         data: updatedUser,
       });
       expect(response).toEqual(updatedUser);
+      expect(mockDatabaseService.employee.update).toHaveBeenCalled();
     });
   });
   describe('EmployeesFindAllService', () => {
@@ -107,6 +105,7 @@ describe('EmployeesService', () => {
       const response = await service.findAll();
       expect(response).toEqual(employees);
       expect(mockDatabaseService.employee.findMany).toHaveBeenCalled();
+      expect(mockDatabaseService.employee.findMany).toHaveBeenCalled();
     });
 
     it('should return a list of employees filtered by role', async () => {
@@ -129,13 +128,23 @@ describe('EmployeesService', () => {
     it('should return a successful response', async () => {
       mockDatabaseService.employee.findUnique.mockResolvedValue(2);
       const response = await service.findOne(2);
-      console.log(response, response);
       expect(response).toEqual(2);
       expect(mockDatabaseService.employee.findUnique).toHaveBeenCalledWith({
         where: { id: 2 },
       });
+      expect(mockDatabaseService.employee.findUnique).toHaveBeenCalled();
+    });
+    it('should throw NotFoundException if employee is not found', async () => {
+      // mockDatabaseService.employee.findUnique.mockResolvedValue(null);
+      // await expect(service.findOne(51)).rejects.toThrow(NotFoundException);
+      // expect(mockDatabaseService.employee.findUnique).toHaveBeenCalledWith({
+      //   where: { id: 51 },
+      // });
     });
   });
+  //common for service layer tests because it ensures that
+  //the service interacts correctly with its dependencies.
+  //use it to Test the interaction with the database
   describe('EmployeesRemoveService', () => {
     it('should have a typeof function', () => {
       expect(typeof service.remove).toBe('function');
@@ -147,6 +156,28 @@ describe('EmployeesService', () => {
       expect(mockDatabaseService.employee.delete).toHaveBeenCalledWith({
         where: { id: 3 },
       });
+      expect(mockDatabaseService.employee.delete).toHaveBeenCalled();
+    });
+  });
+
+  //use it to test the behaviour of the method itself
+  describe('EmployeesRemoveController', () => {
+    const removeUser = {
+      id: 3,
+      name: 'Ann',
+      email: 'annz@gmail.com',
+      role: Role.ADMIN,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+    it('should have a typeof function', () => {
+      expect(typeof service.remove).toBe('function');
+    });
+    it('should delete an employee', async () => {
+      jest.spyOn(service, 'remove').mockResolvedValue(removeUser);
+      const response = await service.remove(3);
+      expect(response.id).toEqual(3);
+      expect(service.remove).toHaveBeenCalled();
     });
   });
 });

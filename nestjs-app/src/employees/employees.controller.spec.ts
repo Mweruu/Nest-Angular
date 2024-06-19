@@ -3,7 +3,6 @@ import { EmployeesController } from './employees.controller';
 import { EmployeesService } from './employees.service';
 import { DatabaseService } from '../database/database.service';
 import { Employee, Prisma, Role } from '@prisma/client';
-
 describe('EmployeesController', () => {
   let controller: EmployeesController;
   let employeesService: EmployeesService;
@@ -39,6 +38,7 @@ describe('EmployeesController', () => {
         newUser as Prisma.EmployeeCreateInput,
       );
       expect(result).toEqual(newUser);
+      expect(employeesService.create).toHaveBeenCalled();
     });
   });
   describe('EmployeesUpdateController', () => {
@@ -60,6 +60,7 @@ describe('EmployeesController', () => {
         updatedUser as Prisma.EmployeeCreateInput,
       );
       expect(response).toEqual(updatedUser);
+      expect(employeesService.update).toHaveBeenCalled();
     });
   });
   describe('EmployeesFindAllController', () => {
@@ -80,6 +81,14 @@ describe('EmployeesController', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        id: 2,
+        name: 'ann',
+        email: 'ann@gmail.com',
+        role: Role.INTERN,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ];
     it('should have a typeof function', () => {
       expect(typeof controller.findAll).toBe('function');
@@ -87,16 +96,19 @@ describe('EmployeesController', () => {
     it('should return all employees', async () => {
       jest.spyOn(employeesService, 'findAll').mockResolvedValue(employees);
       const response = await controller.findAll();
+      console.log(response);
       expect(response).toBe(employees);
+      expect(employeesService.findAll).toHaveBeenCalled();
     });
 
     it('should return a list of employees filtered by role', async () => {
-      const role = 'ENGINEER';
+      const role = 'INTERN';
       const filteredEmployees = employees.filter((emp) => emp.role === role);
       jest
         .spyOn(employeesService, 'findAll')
         .mockResolvedValue(filteredEmployees);
       const response = await controller.findAll(role);
+      console.log(role, response);
       expect(response).toEqual(filteredEmployees);
     });
   });
@@ -115,8 +127,8 @@ describe('EmployeesController', () => {
     it('should return a successful response', async () => {
       jest.spyOn(employeesService, 'findOne').mockResolvedValue(findUser);
       const response = await controller.findOne('2');
-      console.log(response);
       expect(response.id).toBe(2);
+      expect(employeesService.findOne).toHaveBeenCalled();
     });
   });
   describe('EmployeesRemoveController', () => {
@@ -135,6 +147,7 @@ describe('EmployeesController', () => {
       jest.spyOn(employeesService, 'remove').mockResolvedValue(removeUser);
       const response = await controller.remove('3');
       expect(response.id).toEqual(3);
+      expect(employeesService.remove).toHaveBeenCalled();
     });
   });
 });
