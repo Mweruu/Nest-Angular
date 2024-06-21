@@ -1,0 +1,10 @@
+<div class="flex" >
+  <div class="col" >
+    <p-card header="Employee" class="m-3" *ngIf="employee">
+        <img [src]=""  alt="">
+        <h4 class="name">{{employee.firstName}}{{employee.lastName}}</h4>
+        <h5 class="price">{{employee.email}}</h5>
+        <p>{{employee.role}}</p>
+    </p-card>
+  </div>
+</div>

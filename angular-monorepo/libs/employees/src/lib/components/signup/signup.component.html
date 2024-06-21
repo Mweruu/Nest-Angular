@@ -1,0 +1,65 @@
+<div class="login-register">
+  <div class="login-register-panel">
+    <div class="grid">
+      <div class="col-12 p-5">
+        <h2>Welcome!</h2>
+        <h1>Sign Up Page</h1>
+        <form [formGroup] = "SignupFormData">
+          <div class="grid mt-6">
+            <div class="col-12">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-envelope"></i>
+                </span>
+                <input class="w-full" pInputText formControlName="email" placeholder="Email" />
+              </div>
+                <small *ngIf="SignupFormData.invalid && isSubmitted" class="p-error">
+                  <span *ngIf="signupForm['email'].errors?.['required']" class="p-error">Email is required</span>
+                  <span *ngIf="signupForm['email'].errors?.['email']" class="p-error">Email is invalid</span>
+                </small>
+            </div>
+            <div class="col-12">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-lock"></i>
+                </span>
+                <input class="w-full"  pInputText formControlName="firstName" placeholder="Firstname" />
+              </div>
+              <small *ngIf="SignupFormData.invalid && isSubmitted" class="p-error">Firstname is required</small>
+            </div>
+            <div class="col-12">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-lock"></i>
+                </span>
+                <input class="w-full"  pInputText formControlName="lastName" placeholder="Lastname" />
+              </div>
+              <small *ngIf="SignupFormData.invalid && isSubmitted" class="p-error">Lastname is required</small>
+            </div>
+            <div class="col-12">
+              <div class="card flex justify-content-center">
+                <p-selectButton [options]="roleOptions" formControlName="role" optionLabel="name"/>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon">
+                    <i class="pi pi-lock"></i>
+                </span>
+                <input class="w-full"  pInputText formControlName="password" placeholder="Password" />
+              </div>
+              <small *ngIf="SignupFormData.invalid && isSubmitted" class="p-error">Password is required</small>
+            </div>
+            <div class="col-12">
+              <p-button label="Create Account" styleClass="w-full" (click)="onSubmit()"></p-button>
+            </div>
+            <div class="col-12"  *ngIf="isSubmitted && authError">
+              <small class="p-error">{{authMessage}}</small>
+            </div>
+          </div>
+        </form>
+        <p>Already an account? <a href="/login">Login</a></p>
+      </div>
+    </div>
+  </div>
+</div>

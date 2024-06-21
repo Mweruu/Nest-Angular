@@ -1,0 +1,48 @@
+<!-- <p-toast></p-toast> -->
+<div class="product-page">
+  <div class="grid">
+    <div class="col-6" *ngIf="product">
+      <img>
+    </div>
+    <div class="col-6 product" *ngIf="product">
+      <h2 class="product-name">{{product.name}}</h2>
+      <p class="product-desc">{{product.description}}</p>
+      <div class="product-price">
+        {{product.price | currency}}
+        <span class="price-before">
+          {{ (product.price || 0) + 50  | currency }}
+        </span>
+      </div>
+      <p-divider></p-divider>
+      <div class="product-quantity">
+        <div class="flex-auto">
+          <label class="mb-2 block font-bold" for="quantity">Quantity</label>
+          <p-inputNumber [(ngModel)]="quantity" mode="decimal" [showButtons]="true" inputId="quantity" [min]="1" [max]="100"> </p-inputNumber>
+        </div>
+      </div>
+      <div class="product-actions">
+        <p-button
+        styleClass="m-3"
+        label="Buy Now"
+        icon="pi pi-shopping-cart"
+        (click)="addProductToCart()"
+        ></p-button>
+        <p-button
+        styleClass="m-3"
+        label="Add to Cart"
+        icon="pi pi-shopping-cart"
+        (click)="addProductToCart()"
+        routerLink="/"
+        ></p-button>
+        <!-- <button pButton pRipple type="button" label="Buy Now" class="p-button-rounded mr-3" (click)="addProductToCart()" routerLink="/"></button>
+        <button pButton pRipple type="button" label="Add to Cart" class="p-button-rounded mr-2" (click)="addProductToCart()"></button> -->
+      </div>
+    </div>
+    <div class="grid product-rich-desc" *ngIf="product">
+      <div class="col-12">
+        <div [innerHTML]="product.description"></div>
+      </div>
+    </div>
+  </div>
+
+</div>

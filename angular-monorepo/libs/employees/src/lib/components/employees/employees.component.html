@@ -1,0 +1,20 @@
+<div class="grid employee-container" >
+  <div class="flex-1" *ngFor="let employee of employees">
+    <p-card header="Employee" class="m-3 ml-2"  [style]="{ width: '360px'}" (click)="employee.id ? getEmployee(employee.id) : null">
+        <img [src]=""  alt="">
+        <h4 class="name">{{employee.firstName}} {{employee.lastName}}</h4>
+        <h5 class="price">{{employee.email}}</h5>
+        <p>{{employee.role}}</p>
+    </p-card>
+  </div>
+</div>
+<div class="flex cont">
+  <!-- <div class="flex-1 h-4rem bg-primary font-bold text-center p-4 m-4 border-round">1</div>
+  <div class="flex-1 h-4rem bg-primary font-bold text-center p-4 m-4 border-round mx-4">2</div>
+  <div class="flex-1 h-4rem bg-primary font-bold text-center p-4 m-4 border-round">3</div> -->
+</div>
+<div class="flex cont2">
+  <!-- <div class="flex-1 h-4rem bg-primary font-bold text-center p-4 m-4 border-round">1</div>
+  <div class="flex-1 h-4rem bg-primary font-bold text-center p-4 m-4 border-round mx-4">2</div>
+  <div class="flex-1 h-4rem bg-primary font-bold text-center p-4 m-4 border-round">3</div> -->
+</div>

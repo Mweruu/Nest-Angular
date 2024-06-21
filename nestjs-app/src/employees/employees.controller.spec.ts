@@ -23,8 +23,10 @@ describe('EmployeesController', () => {
   describe('EmployeesCreateController', () => {
     const newUser: Employee = {
       id: 1,
-      name: 'Ann',
+      firstName: 'Ann',
+      lastName: 'Ann',
       email: 'annz@gmail.com',
+      password: 'Mweru123',
       role: Role.ADMIN,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -44,8 +46,10 @@ describe('EmployeesController', () => {
   describe('EmployeesUpdateController', () => {
     const updatedUser = {
       id: 1,
-      name: 'Ann Updated',
+      firstName: 'Ann',
+      lastName: 'Updated',
       email: 'ann.updated@gmail.com',
+      password: 'Mweru123',
       role: Role.ADMIN,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -67,24 +71,30 @@ describe('EmployeesController', () => {
     const employees = [
       {
         id: 1,
-        name: 'John Doe',
+        firstName: 'John',
+        lastName: 'Doe',
         email: 'john@gmail.com',
+        password: 'Mweru123',
         role: Role.ADMIN,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 2,
-        name: 'Jane Smith',
+        firstName: 'Jane',
+        lastName: 'Smith',
         email: 'jane@gmail.com',
+        password: 'Mweru123',
         role: Role.ENGINEER,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 2,
-        name: 'ann',
+        firstName: 'Ann',
+        lastName: 'Ann',
         email: 'ann@gmail.com',
+        password: 'Mweru123',
         role: Role.INTERN,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -108,15 +118,16 @@ describe('EmployeesController', () => {
         .spyOn(employeesService, 'findAll')
         .mockResolvedValue(filteredEmployees);
       const response = await controller.findAll(role);
-      console.log(role, response);
       expect(response).toEqual(filteredEmployees);
     });
   });
   describe('EmployeesFindOneController', () => {
     const findUser: Employee = {
       id: 2,
-      name: 'Ann',
+      firstName: 'Ann',
+      lastName: 'Ann',
       email: 'annz@gmail.com',
+      password: 'Mweru123',
       role: Role.ADMIN,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -134,8 +145,10 @@ describe('EmployeesController', () => {
   describe('EmployeesRemoveController', () => {
     const removeUser: Employee = {
       id: 3,
-      name: 'Ann',
+      firstName: 'Ann',
+      lastName: 'Ann',
       email: 'annz@gmail.com',
+      password: 'Mweru123',
       role: Role.ADMIN,
       createdAt: new Date(),
       updatedAt: new Date(),

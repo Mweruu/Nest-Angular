@@ -36,7 +36,8 @@ describe('EmployeesService', () => {
     });
     it('should create and return an employee', async () => {
       const newUser = {
-        name: 'Zinn',
+        firstName: 'Zinn',
+        lastName: 'Ann',
         email: 'zin@gmail.com',
         role: 'ADMIN',
       };
@@ -55,7 +56,9 @@ describe('EmployeesService', () => {
   describe('EmployeesUpdateService', () => {
     const updatedUser = {
       id: 1,
-      name: 'Ann Updated',
+      firstName: 'Ann',
+      lastName: 'Updated',
+      password: 'Mweru123',
       email: 'ann.updated@gmail.com',
       role: 'ADMIN',
     };
@@ -81,15 +84,18 @@ describe('EmployeesService', () => {
     const employees = [
       {
         id: 1,
-        name: 'John Doe',
+        firstName: 'John',
+        lastName: 'Doe',
         email: 'john@gmail.com',
+        password: 'Mweru123',
         role: 'ADMIN',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         id: 2,
-        name: 'Jane Smith',
+        firstName: 'Jane',
+        lastName: 'Smith',
         email: 'jane@gmail.com',
         role: 'ENGINEER',
         createdAt: new Date(),
@@ -164,9 +170,11 @@ describe('EmployeesService', () => {
   describe('EmployeesRemoveController', () => {
     const removeUser = {
       id: 3,
-      name: 'Ann',
+      firstName: 'Ann',
+      lastName: 'Ann',
       email: 'annz@gmail.com',
       role: Role.ADMIN,
+      password: 'Mweru123',
       createdAt: new Date(),
       updatedAt: new Date(),
     };

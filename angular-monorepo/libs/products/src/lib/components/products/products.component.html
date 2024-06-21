@@ -1,0 +1,15 @@
+<h3>Products</h3>
+<div class="grid">
+  <div class="col-3 product-item" *ngFor="let product of products">
+    <div class="product-item-wrapper" (click)="product.id ? getProduct(product.id) : null">
+      <h4 class="name">{{product.name}}</h4>
+      <h5 class="price">{{product.price | currency}}</h5>
+      <p-button
+      styleClass="mt-3 add-to-cart"
+      label="Add to Cart"
+      icon="pi pi-shopping-cart"
+      (click)="addProductToCart()"
+      ></p-button>
+    </div>
+  </div>
+</div>

@@ -19,7 +19,9 @@ datasource db {
 //data expected in our table
 model Employee {
   id  Int @id @default(autoincrement())
-  name  String 
+  password String 
+  firstName String
+  lastName String
   email String @unique
   role  Role
   createdAt DateTime @default(now())
@@ -30,4 +32,26 @@ enum Role {
   INTERN
   ENGINEER
   ADMIN
+}
+
+model Product {
+  id  Int @id @default(autoincrement())
+  name String
+  price Int
+  quantity Int
+  description String
+  // category Category @relation(fields: [catId], references: [id])
+  catId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Category {
+  id  Int @id @default(autoincrement())
+  name String
+  icon String
+  color String
+  // products Product[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

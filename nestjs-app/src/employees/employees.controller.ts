@@ -13,9 +13,9 @@ import {
 } from '@nestjs/common';
 import { EmployeesService } from './employees.service';
 import { Prisma } from '@prisma/client';
-import { SkipThrottle, Throttle } from '@nestjs/throttler';
+// import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
-@SkipThrottle()
+// @SkipThrottle()
 @Controller('employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
@@ -25,13 +25,12 @@ export class EmployeesController {
   create(@Body(ValidationPipe) createEmployeeDto: Prisma.EmployeeCreateInput) {
     return this.employeesService.create(createEmployeeDto);
   }
-  @SkipThrottle({ default: false })
+  // @SkipThrottle({ default: false })
   @Get()
   findAll(@Query('role') role?: 'INTERN' | 'ADMIN' | 'ENGINEER') {
     return this.employeesService.findAll(role);
   }
 
-  @Throttle({ short: { ttl: 1000, limit: 1 } })
   @Get(':id')
   findOne(@Param('id', ParseIntPipe) id: string) {
     return this.employeesService.findOne(+id);

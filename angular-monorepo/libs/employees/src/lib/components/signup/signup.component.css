@@ -1,0 +1,22 @@
+.login-register{
+  background: linear-gradient(235deg, #0b0b0f, #39393a);
+  height: 100vh;
+  .login-register-panel{
+    width: 650px;
+    height: 625px;
+    background-color: var(--surface-a);
+    position: absolute;
+    left: calc(50% - 325px);
+    top:calc(50% - 262px);
+
+  }
+  /* &-grid1{
+    background: linear-gradient(235deg, #565867, #565974);
+    height: 70vh;
+    padding: 20px;
+  } */
+}
+h1, h2, p{
+  justify-content: center;
+  display: flex;
+}

@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Employee, Prisma } from '@prisma/client';
 import { DatabaseService } from '../database/database.service';
 import { Logger } from '@nestjs/common';
 // import { PinoLogger, InjectPinoLogger } from 'nestjs-pino';
@@ -21,17 +21,16 @@ export class EmployeesService {
   }
 
   async findAll(role?: 'INTERN' | 'ADMIN' | 'ENGINEER') {
-    this.logger.warn({ foo: 'bar' }, 'baz %s', 'qux');
-    this.logger.error('foo %s %o', 'bar', { baz: 'qux' });
-    this.logger.log('foo');
-    this.logger.debug('kdfjhdjmk');
-    this.logger.verbose('hhnnnhdjmk');
-    this.logger.fatal(
-      { id: `retrieve-all-pokemon-error` },
-      `Retrieve all Pokemon`,
-    );
+    // this.logger.warn({ foo: 'bar' }, 'baz %s', 'qux');
+    // this.logger.error('foo %s %o', 'bar', { baz: 'qux' });
+    // this.logger.log('foo');
+    // this.logger.debug('kdfjhdjmk');
+    // this.logger.verbose('hhnnnhdjmk');
+    // this.logger.fatal(
+    //   { id: `retrieve-all-pokemon-error` },
+    //   `Retrieve all Pokemon`,
+    // );
     if (role) {
-      console.log(32, role, 9990);
       return this.databaseService.employee.findMany({ where: { role } });
     }
     return this.databaseService.employee.findMany();
@@ -41,10 +40,16 @@ export class EmployeesService {
     const employee = this.databaseService.employee.findUnique({
       where: { id },
     });
-    console.log(employee);
     if (!employee) {
       throw new NotFoundException('Employee not found');
     }
+    return employee;
+  }
+
+  async findOneEmail(email: string): Promise<Employee> {
+    const employee = this.databaseService.employee.findUnique({
+      where: { email },
+    });
     return employee;
   }
 

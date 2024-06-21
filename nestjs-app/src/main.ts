@@ -18,6 +18,6 @@ async function bootstrap() {
 
   app.enableCors(); //open it up for everyone cross origin resource sharing
   // app.setGlobalPrefix('api');
-  await app.listen(3000);
+  await app.listen(3001);
 }
 bootstrap();
