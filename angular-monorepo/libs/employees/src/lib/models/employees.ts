@@ -5,5 +5,7 @@ export class Employee {
   firstName?:string;
   lastName?:string;
   email?:string;
-  role?:Role
+  role?:Role;
+  orderId?:number;
+
 }

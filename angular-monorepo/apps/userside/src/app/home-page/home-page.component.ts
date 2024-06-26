@@ -14,9 +14,10 @@ export class HomePageComponent implements OnInit{
   responsiveOptions: any[] | undefined;
   images: any[] | undefined;
 
+
+
   ngOnInit(): void {
       this.images =   ['https://st.depositphotos.com/1891797/3517/i/450/depositphotos_35173743-stock-photo-sale-on-wood-background.jpg','https://st.depositphotos.com/1891797/3517/i/450/depositphotos_35173743-stock-photo-sale-on-wood-background.jpg'];
-
   }
 
 }

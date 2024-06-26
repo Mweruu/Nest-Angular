@@ -7,7 +7,7 @@ import { Product } from '../models/products';
   providedIn: 'root'
 })
 export class ProductsService {
-  BASE_URL = "http://localhost:3001/"
+  BASE_URL = "http://localhost:3000/"
 
   constructor(private http: HttpClient) { }
 
@@ -21,5 +21,9 @@ export class ProductsService {
 
   getProduct(id:string):Observable<Product>{
     return this.http.get<Product>(`${this.BASE_URL}products/${id}`)
+  }
+
+  getProductCategory(catId:string):Observable<Product[]>{
+    return this.http.get<Product[]>(`${this.BASE_URL}products/category/${catId}`)
   }
 }

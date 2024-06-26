@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CategoryService } from '../../services/category.service';
 import { Category } from '../../models/category';
 import { Router } from '@angular/router';
+import { ProductsService } from '@angular-monorepo/products';
 
 @Component({
   selector: 'lib-category',
@@ -11,6 +12,7 @@ import { Router } from '@angular/router';
 export class CategoryComponent  implements OnInit{
   categories:Category[]=[];
   constructor(private categoryService: CategoryService,
+    private productsService:ProductsService,
     private router: Router
   ){}
 
@@ -23,7 +25,10 @@ export class CategoryComponent  implements OnInit{
       console.log(categories)
     })
   }
-  getCatProducts(){
-    this.router.navigate(['/products'])
+  getCatProducts(catId:string){
+    this.productsService.getProductCategory(catId).subscribe(products =>{
+      console.log(products)
+    })
+    this.router.navigate([`/products/category/${catId}`])
   }
 }

@@ -1,10 +1,33 @@
 <div class="flex" >
-  <div class="col" >
-    <p-card header="Employee" class="m-3" *ngIf="employee">
+  <div class="col-6">
+    <img src="https://media.istockphoto.com/id/1495088043/vector/user-profile-icon-avatar-or-person-icon-profile-picture-portrait-symbol-default-portrait.jpg?s=612x612&w=0&k=20&c=dhV2p1JwmloBTOaGAtaA3AW1KSnjsdMt7-U_3EZElZ0=" alt="">
+  </div>
+  <div class="col-5 col-offset-1" *ngIf="employee">
+    <div class="field grid">
+      <label htmlFor="name" class="col-12 mb-2 md:col-2 md:mb-0">Name</label>
+      <div class="col-12 md:col-10">
+        <h4 class="name">{{employee.firstName}} {{employee.lastName}}</h4>
+      </div>
+    </div>
+    <div class="field grid">
+      <label htmlFor="email" class="col-12 mb-2 md:col-2 md:mb-0">Email</label>
+      <div class="col-12 md:col-10">
+        <h5 class="price">{{employee.email}}</h5>
+      </div>
+    </div>
+    <div class="field grid">
+      <label htmlFor="role" class="col-12 mb-2 md:col-2 md:mb-0">Role</label>
+      <div class="col-12 md:col-10">
+        <p>{{employee.role}}</p>
+      </div>
+    </div>
+    <!-- <p-card header="Employee" class="m-3" *ngIf="employee"> -->
         <img [src]=""  alt="">
-        <h4 class="name">{{employee.firstName}}{{employee.lastName}}</h4>
+        <div>
+          <h4 class="name">{{employee.firstName}} {{employee.lastName}}</h4>
+        </div>
         <h5 class="price">{{employee.email}}</h5>
         <p>{{employee.role}}</p>
-    </p-card>
+    <!-- </p-card> -->
   </div>
 </div>

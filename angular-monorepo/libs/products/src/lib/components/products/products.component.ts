@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ProductsService } from '../../services/products.service';
 import { Router } from '@angular/router';
 import { Product } from '../../models/products';
+import { SelectItem } from 'primeng/api';
+import { DataView } from 'primeng/dataview';
 
 @Component({
   selector: 'lib-products',
@@ -10,6 +12,9 @@ import { Product } from '../../models/products';
 })
 export class ProductsComponent implements OnInit {
   products:Product[] = [];
+  sortOptions: SelectItem[] = [];
+  sortField = '';
+  sortOrder = 0;
 
   constructor(
     private productsService: ProductsService,
@@ -17,18 +22,43 @@ export class ProductsComponent implements OnInit {
   ){}
 
   ngOnInit(): void {
+    this.sortOptions = [
+      { label: 'Price High to Low', value: '!price' },
+      { label: 'Price Low to High', value: 'price' }
+    ];
     this.getProducts();
   }
 
   getProducts(){
     this.productsService.getProducts().subscribe(products =>{
       this.products = products
-    })
+      console.log(products)
+      products.forEach(product => {
+        if(product.category)
+        console.log(product?.category.name);
+      });    })
   }
 
   getProduct(productId:string){
     this.router.navigate([`/products/${productId}`]);
   }
+
+  onSortChange(event: any) {
+    const value = event.value;
+
+    if (value.indexOf('!') === 0) {
+        this.sortOrder = -1;
+        this.sortField = value.substring(1, value.length);
+    } else {
+        this.sortOrder = 1;
+        this.sortField = value;
+    }
+  }
+
+  onFilter(dv: DataView, event: Event) {
+    dv.filter((event.target as HTMLInputElement).value);
+  }
+
   addProductToCart(){
     console.log(454)
     // const cartItem : CartItem = {

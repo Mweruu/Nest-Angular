@@ -26,6 +26,7 @@ model Employee {
   role  Role
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  orders Order[]
 }
 
 enum Role {
@@ -36,14 +37,23 @@ enum Role {
 
 model Product {
   id  Int @id @default(autoincrement())
+  code String
   name String
   price Int
   quantity Int
   description String
-  // category Category @relation(fields: [catId], references: [id])
   catId Int
+  category Category @relation(fields: [catId], references: [id])
+  inventoryStatus InventoryStatus
+  orders OrderProduct[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum InventoryStatus {
+  INSTOCK
+  LOWSTOCK
+  OUTOFSTOCK
 }
 
 model Category {
@@ -51,7 +61,36 @@ model Category {
   name String
   icon String
   color String
-  // products Product[]
+  products Product[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id        Int              @id @default(autoincrement())
+  date      DateTime         @default(now())
+  products  OrderProduct[]
+  amount    Int
+  quantity  Int
+  customer  Employee?        @relation(fields: [customerId], references: [id])
+  customerId Int?
+  status    OrderStatus
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+model OrderProduct {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  product   Product @relation(fields: [productId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  DELIVERED
+  RETURNED
+  CANCELLED
 }

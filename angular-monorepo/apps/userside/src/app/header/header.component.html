@@ -6,10 +6,13 @@
         <input type="text" pInputText placeholder="Search" />
       </p-iconField>
     </div>
-    <div class="col-5 col-offset-1 navigation">
+    <div class="col-4 col-offset-2 navigation">
       <ul class="nav">
-        <li><a href="/products">Products</a></li>
         <li><a href="/">Home</a></li>
+        <li><a href="/products">Products</a></li>
+        <!-- <div class="card"> -->
+          <!-- <p-megaMenu [model]="items" /> -->
+        <!-- </div> -->
         <!-- <li><a>{{username}}</a></li> -->
         <li *ngIf="!username" ><a href="/login">Contact</a></li>
         <li  *ngIf="username" (click)="getEmployee(empId)"> <a>{{username}}</a></li>

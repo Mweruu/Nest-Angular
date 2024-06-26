@@ -13,11 +13,17 @@ import { RatingModule } from 'primeng/rating';
 import { DividerModule } from 'primeng/divider';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
+import { ProductCategoryComponent } from '../components/product-category/product-category.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { DataViewModule } from 'primeng/dataview';
+import { MessageService } from 'primeng/api';
+import { ProductsService } from '../services/products.service';
+
 export const routes: Routes = [];
 
 
 @NgModule({
-  declarations: [ProductsComponent, ProductDetailsComponent],
+  declarations: [ProductsComponent, ProductDetailsComponent, ProductCategoryComponent],
   imports: [
     CommonModule,
     CardModule,
@@ -27,10 +33,18 @@ export const routes: Routes = [];
     ToastModule,
     RatingModule,
     DividerModule,
-    InputNumberModule
-
+    InputNumberModule,
+		// DataViewModule,
+		// PickListModule,
+		// OrderListModule,
+		InputTextModule,
+		DropdownModule,
+		RatingModule,
+		ButtonModule,
+    DataViewModule,
     // CategoryModule,
   ],
-  exports: [ProductsComponent, ProductDetailsComponent]
+  providers: [ProductsService, MessageService],
+  exports: [ProductsComponent, ProductDetailsComponent, ProductCategoryComponent]
 })
 export class ProductsModule { }

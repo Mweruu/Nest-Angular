@@ -1,0 +1,14 @@
+li{
+  list-style: none;
+  margin: 15px;
+  a{
+    text-decoration: none;
+    font-size: 1.2em;
+    color: rgb(85, 83, 83);
+  }
+  .pi{
+    font-size: 1.0em;
+    margin: 2px;
+  }
+}
+

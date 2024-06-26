@@ -10,6 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {EmployeesModule} from '../../../../libs/employees/src/lib/employees/employees.module';
 import {ProductsModule} from '../../../../libs/products/src/lib/products/products.module';
 import {CategoryModule} from '../../../../libs/category/src/lib/category/category.module';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @Component({
   standalone: true,
@@ -19,6 +20,7 @@ import {CategoryModule} from '../../../../libs/category/src/lib/category/categor
     RouterModule,
     FooterComponent,
     HeaderComponent,
+    HomePageComponent,
     IconFieldModule,
     InputIconModule,
     InputTextModule,

@@ -6,12 +6,9 @@
     </div>
     <div class="col-6 product" *ngIf="product">
       <h2 class="product-name">{{product.name}}</h2>
-      <p class="product-desc">{{product.description}}</p>
+      <!-- <p class="product-desc">{{product.description}}</p> -->
       <div class="product-price">
         {{product.price | currency}}
-        <span class="price-before">
-          {{ (product.price || 0) + 50  | currency }}
-        </span>
       </div>
       <p-divider></p-divider>
       <div class="product-quantity">
@@ -38,6 +35,7 @@
         <button pButton pRipple type="button" label="Add to Cart" class="p-button-rounded mr-2" (click)="addProductToCart()"></button> -->
       </div>
     </div>
+    <h2>DESCRIPTION</h2>
     <div class="grid product-rich-desc" *ngIf="product">
       <div class="col-12">
         <div [innerHTML]="product.description"></div>

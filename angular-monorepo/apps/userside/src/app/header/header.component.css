@@ -29,10 +29,11 @@ header{
     a{
       color: var(--surface-500);
       cursor: pointer;
+      text-decoration: none;
 
-      /* &:hover{
-        color: $primary-color;
-      } */
+      &:hover{
+        color: orange;
+      }
     }
   }
 }

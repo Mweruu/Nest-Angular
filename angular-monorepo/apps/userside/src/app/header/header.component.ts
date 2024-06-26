@@ -6,6 +6,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { LocalstorageService } from 'libs/employees/src/lib/services/localstorage.service';
 import { EmployeesService } from '@angular-monorepo/employees';
 import { Router } from '@angular/router';
+import { MegaMenuModule } from 'primeng/megamenu';
+import { MegaMenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-header',
@@ -15,6 +17,7 @@ import { Router } from '@angular/router';
     IconFieldModule,
     InputIconModule,
     InputTextModule,
+    MegaMenuModule
   ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
@@ -22,6 +25,7 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit {
   username!:string;
   empId!:string;
+  items: MegaMenuItem[] | undefined;
 
   constructor(private localStorage:LocalstorageService,
     private employeesService:EmployeesService,
@@ -38,11 +42,16 @@ export class HeaderComponent implements OnInit {
       const tokenDecode = JSON.parse(atob(token.split('.')[1]));
       console.log(tokenDecode)
       this.employeesService.getEmployee(tokenDecode.id).subscribe(employee =>{
-        console.log(employee)
-        if((employee.firstName || employee.email) && employee.id ){
-          this.username = employee.firstName ? employee.firstName : employee.email!;
-          this.empId = employee.id;
+        console.log("employee", employee)
+        if(employee){
+          if(employee.firstName && employee.id ){
+            this.username = employee.firstName;
+            this.empId = employee.id;
+          }
+        }else{
+          this.username = '';
         }
+
       })
     }
   }

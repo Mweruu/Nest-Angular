@@ -1,0 +1,81 @@
+<h3>Products</h3>
+<div class="grid">
+  <div class="col-3 product-item" *ngFor="let product of products">
+    <div class="product-item-wrapper" (click)="product.id ? getProduct(product.id) : null">
+      <!-- <img src="data:image/png;base64,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"> -->
+      <img src="data:image/jpeg;base64,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">
+      <h4 class="name">{{product.name}}</h4>
+      <h5 class="price">{{product.price | currency}}</h5>
+      <p-button
+      styleClass="mt-3 add-to-cart"
+      label="Add to Cart"
+      icon="pi pi-shopping-cart"
+      (click)="addProductToCart()"
+      ></p-button>
+    </div>
+  </div>
+	<!-- <div class="col-12">
+		<div class="card">
+			<h5>Products</h5>
+			<p-dataView #dv [value]="products" [paginator]="true" [rows]="9" filterBy="name" [sortField]="sortField" [sortOrder]="sortOrder" layout="grid">
+				<ng-template pTemplate="header">
+					<div class="flex flex-column md:flex-row md:justify-content-between gap-2">
+						<p-dropdown [options]="sortOptions" placeholder="Sort By Price" (onChange)="onSortChange($event)"></p-dropdown>
+						<span class="p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input type="search" pInputText placeholder="Search by Name" (input)="onFilter(dv, $event)">
+                        </span>
+						<p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+					</div>
+				</ng-template>
+
+				<ng-template let-products pTemplate="listItem">
+					<div class="col-12" *ngFor="let product of products">
+						<div class="flex flex-column md:flex-row align-items-center p-3 w-full" (click)="product.id ? getProduct(product.id) : null">
+							<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" class="my-4 md:my-0 w-9 md:w-10rem shadow-2 mr-5"/>
+							<div class="flex-1 flex flex-column align-items-center text-center md:text-left">
+								<div class="font-bold text-2xl">{{product.name}}</div>
+								<div class="mb-2">{{product.description}}</div>
+								<p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false" styleClass="mb-2"></p-rating>
+								<div class="flex align-items-center mt-2">
+									<i class="pi pi-tag mr-2"></i>
+									<span class="font-semibold">{{product.category}}</span>
+								</div>
+							</div>
+							<div class="flex flex-row md:flex-column justify-content-between w-full md:w-auto align-items-center md:align-items-end mt-5 md:mt-0">
+								<span class="text-2xl font-semibold mb-2 align-self-center md:align-self-end">${{product.price}}</span>
+								<p-button icon="pi pi-shopping-cart" label="Add to Cart" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'" styleClass="mb-2 p-button-sm"></p-button>
+								<span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span>
+							</div>
+						</div>
+					</div>
+				</ng-template>
+
+				<ng-template let-products pTemplate="gridItem">
+					<div class="grid grid-nogutter">
+					<div class="col-12 md:col-4" *ngFor="let product of products">
+						<div class="card m-3 border-1 surface-border">
+							<div class="flex flex-wrap gap-2 align-items-center justify-content-between mb-2">
+								<div class="flex align-items-center">
+									<i class="pi pi-tag mr-2"></i>
+									<span class="font-semibold">{{product.category}}</span>
+								</div>
+								<span [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span>
+							</div>
+							<div class="flex flex-column align-items-center text-center mb-3">
+								<img [src]="'assets/demo/images/product/' + product.image" [alt]="product.name" class="w-9 shadow-2 my-3 mx-0"/>
+								<div class="text-2xl font-bold">{{product.name}}</div>
+								<div class="mb-3">{{product.description}}</div>
+								<p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+							</div>
+							<div class="flex align-items-center justify-content-between">
+								<span class="text-2xl font-semibold">${{product.price}}</span>
+								<p-button icon="pi pi-shopping-cart" [disabled]="product.inventoryStatus === 'OUTOFSTOCK'"></p-button>
+							</div>
+						</div>
+					</div>
+					</div>
+				</ng-template>
+			</p-dataView>
+		</div>
+	</div> -->

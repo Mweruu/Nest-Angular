@@ -14,17 +14,17 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: bisque;
+    /* background-color: bisque; */
     flex-direction: column;
     cursor: pointer;
-  &-icon{
+    .category-icon{
     .pi{
       font-size: 2em;
       margin-bottom: 10px;
     }
   }
 
-  &-name{
+  .category-name{
     font-size: 1em;
   }
 }

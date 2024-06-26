@@ -5,6 +5,7 @@ import { EmployeeDetailsComponent } from 'libs/employees/src/lib/components/empl
 import { HomePageComponent } from './home-page/home-page.component';
 import { ProductsComponent } from '@angular-monorepo/products';
 import { ProductDetailsComponent } from 'libs/products/src/lib/components/product-details/product-details.component';
+import { ProductCategoryComponent } from 'libs/products/src/lib/components/product-category/product-category.component';
 
 export const appRoutes: Route[] = [
  {
@@ -17,7 +18,7 @@ export const appRoutes: Route[] = [
  { path: 'employees/:id', component: EmployeeDetailsComponent },
  { path: 'products/:id', component: ProductDetailsComponent },
  { path: 'products', component: ProductsComponent },
-
+ { path: 'products/category/:id', component:ProductCategoryComponent},
 ];
 // export const appRoutes = routes
 //  RouterModule.forRoot(routes);
