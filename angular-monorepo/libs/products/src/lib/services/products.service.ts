@@ -19,6 +19,10 @@ export class ProductsService {
     return this.http.post<Product>(`${this.BASE_URL}products`, product)
   }
 
+  updateProduct( id:string, product:Product):Observable<Product>{
+    return this.http.patch<Product>(`${this.BASE_URL}products/${id}`, product)
+  }
+
   getProduct(id:string):Observable<Product>{
     return this.http.get<Product>(`${this.BASE_URL}products/${id}`)
   }

@@ -32,11 +32,7 @@ export class ProductsComponent implements OnInit {
   getProducts(){
     this.productsService.getProducts().subscribe(products =>{
       this.products = products
-      console.log(products)
-      products.forEach(product => {
-        if(product.category)
-        console.log(product?.category.name);
-      });    })
+    })
   }
 
   getProduct(productId:string){

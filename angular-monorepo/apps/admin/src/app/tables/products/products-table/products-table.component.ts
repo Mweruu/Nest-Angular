@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from '../../../../../../../libs/products/src';
 import { ProductsService } from 'libs/products/src/lib/services/products.service';
+import { Router } from '@angular/router';
 
 interface expandedRows {
   [key: string]: boolean;
@@ -15,20 +16,26 @@ export class ProductsTableComponent implements OnInit {
   isExpanded = false;
   products:Product[] = []
 
-  constructor(private productsService:ProductsService) { }
+  constructor(private productsService:ProductsService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
-    console.log("dfjhdf")
     this.getProducts()
   }
 
   getProducts(){
-    console.log("getProducts")
-    this.productsService.getProducts().subscribe(products => this.products = products);
+    this.productsService.getProducts().subscribe(products =>{
+      console.log(products);
+      this.products = products;
+    })
+  }
+
+  editProduct(prodId:string){
+    this.router.navigate([`/products/form/${prodId}`]);
   }
 
   expandAll() {
-    console.log(this.products)
       if (!this.isExpanded) {
           this.products.forEach(product => product && product.name ? this.expandedRows[product.name] = true : '');
 

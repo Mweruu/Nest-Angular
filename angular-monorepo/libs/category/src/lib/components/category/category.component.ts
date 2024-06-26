@@ -22,13 +22,9 @@ export class CategoryComponent  implements OnInit{
   getCategories(){
     this.categoryService.getCategories().subscribe( categories=>{
       this.categories = categories;
-      console.log(categories)
     })
   }
   getCatProducts(catId:string){
-    this.productsService.getProductCategory(catId).subscribe(products =>{
-      console.log(products)
-    })
     this.router.navigate([`/products/category/${catId}`])
   }
 }

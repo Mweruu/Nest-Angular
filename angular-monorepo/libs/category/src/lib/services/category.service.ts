@@ -22,4 +22,8 @@ export class CategoryService {
   getCategory(id:string):Observable<Category>{
     return this.http.get<Category>(`${this.BASE_URL}category/${id}`)
   }
+
+  updateCategories(id:string, category:Category):Observable<Category>{
+    return this.http.patch<Category>(`${this.BASE_URL}category/${id}`, category)
+  }
 }

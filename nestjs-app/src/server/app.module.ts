@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './model/products/products.module';
 import { CategoryModule } from './model/category/category.module';
 import { AppController } from './app.controller';
+import { OrdersModule } from './model/orders/orders.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AppController } from './app.controller';
     EmployeesModule,
     ProductsModule,
     CategoryModule,
+    OrdersModule,
     LoggerModule.forRoot({
       pinoHttp: {
         transport: {

@@ -16,7 +16,7 @@ export class ProductsService {
     return this.databaseService.product.findMany({
       include: {
         category: true,
-        // orders: true,
+        orders: true,
       },
     });
   }
@@ -30,7 +30,7 @@ export class ProductsService {
   findCategory(catId: number) {
     return this.databaseService.product.findMany({
       where: { catId },
-      include: { category: true },
+      include: { category: true, orders: true },
     });
   }
 

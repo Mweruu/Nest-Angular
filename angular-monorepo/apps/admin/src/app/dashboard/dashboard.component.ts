@@ -14,13 +14,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   items!: MenuItem[];
 
   products = [];
+
   chartData: any;
   chartOptions: any;
   subscription!: Subscription;
-
+  totalEmployees!:number;
   constructor( public layoutService: LayoutService,
-    //  private employeesService:EmployeesService,
-    // private productService:ProductsService,
+     private employeesService:EmployeesService,
+    private productService:ProductsService,
     ) {
       this.subscription = this.layoutService.configUpdate$
       .pipe(debounceTime(25))
@@ -38,9 +39,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           { label: 'Add New', icon: 'pi pi-fw pi-plus' },
           { label: 'Remove', icon: 'pi pi-fw pi-minus' }
       ];
-      // this.employeesService.getEmployees().subscribe(employees =>{
-      //   console.log(employees)
-      // })
+      this.employeesService.getEmployees().subscribe(employees =>{
+        console.log(employees, employees.length)
+        this.totalEmployees = employees.length
+      })
   }
 
   initChart() {

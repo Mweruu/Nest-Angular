@@ -6,6 +6,5 @@ export class Employee {
   lastName?:string;
   email?:string;
   role?:Role;
-  orderId?:number;
-
+  password?:string;
 }

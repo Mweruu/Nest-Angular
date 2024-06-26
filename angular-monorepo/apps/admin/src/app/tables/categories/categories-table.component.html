@@ -1,1 +1,40 @@
-<p>categories-table works!</p>
+<div class="col-12">
+  <div class="card">
+    <h3>List of Categories</h3>
+    <div class="card">
+      <p-table [value]="categories" [tableStyle]="{'min-width': '50rem'}">
+        <ng-template pTemplate="caption">
+          <div class="flex justify-content-between flex-column sm:flex-row">
+            <p-button
+            label="Create"
+            icon="pi pi-arrow-circle-left"
+            styleClass="p-button-secondary"
+            class="mr-2"
+            routerLink="/category/form"
+            ></p-button>
+          </div>
+          <div class="flex table-header">
+          </div>
+        </ng-template>
+          <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th pSortableColumn="name" >Name <p-sortIcon field="name"></p-sortIcon></th>
+                <th pSortableColumn="icon" >Icon <p-sortIcon field="icon"></p-sortIcon></th>
+                <th pSortableColumn="color" >Color <p-sortIcon field="color"></p-sortIcon></th>
+                <th></th>
+              </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-category let-columns="columns">
+              <tr>
+                  <td>
+                      {{category.name}}
+                  </td>
+                  <td><i class="pi" style="font-size: 1.5rem" [ngClass]="'pi-' + category.icon"></i></td>
+                  <td><p-colorPicker [(ngModel)]="category.color"></p-colorPicker>
+                  <td><i class="pi pi-pencil" style="color: red" (click)="editCategory(category.id)"></i></td>
+              </tr>
+          </ng-template>
+      </p-table>
+  </div>
+  </div>
+</div>

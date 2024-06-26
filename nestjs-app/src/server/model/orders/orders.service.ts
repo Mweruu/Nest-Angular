@@ -1,25 +1,42 @@
 import { Injectable } from '@nestjs/common';
-// import { Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { DatabaseService } from 'src/server/database/database.service';
 
 @Injectable()
 export class OrdersService {
-  // create(createOrderDto: Prisma.CategoryCreateInput) {
-  //   return 'This action adds a new order';
-  // }
+  constructor(private readonly databaseService: DatabaseService) {}
+
+  create(createOrderDto: Prisma.OrderCreateInput) {
+    return this.databaseService.order.create({
+      data: createOrderDto,
+    });
+  }
 
   findAll() {
-    return `This action returns all orders`;
+    return this.databaseService.order.findMany({
+      include: {
+        products: true,
+        customer: true,
+      },
+    });
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} order`;
+    return this.databaseService.order.findUnique({
+      where: { id },
+    });
   }
 
-  // update(id: number, updateOrderDto:Prisma.CategoryCreateInput) {
-  //   return `This action updates a #${id} order`;
-  // }
+  update(id: number, updateOrderDto: Prisma.OrderUpdateInput) {
+    return this.databaseService.order.update({
+      where: { id },
+      data: updateOrderDto,
+    });
+  }
 
   remove(id: number) {
-    return `This action removes a #${id} order`;
+    return this.databaseService.order.delete({
+      where: { id },
+    });
   }
 }

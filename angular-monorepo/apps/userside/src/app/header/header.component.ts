@@ -40,9 +40,7 @@ export class HeaderComponent implements OnInit {
     const token = this.localStorage.getToken();
     if(token){
       const tokenDecode = JSON.parse(atob(token.split('.')[1]));
-      console.log(tokenDecode)
       this.employeesService.getEmployee(tokenDecode.id).subscribe(employee =>{
-        console.log("employee", employee)
         if(employee){
           if(employee.firstName && employee.id ){
             this.username = employee.firstName;

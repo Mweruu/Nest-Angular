@@ -56,7 +56,6 @@ export class SignupComponent implements OnInit {
       lastName:this.signupForm['lastName'].value,
       role:this.signupForm['role'].value.name,
     }
-    console.log(signupData)
     this._createEmployee(signupData)
   }
 

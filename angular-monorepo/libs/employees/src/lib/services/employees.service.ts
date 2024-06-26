@@ -22,4 +22,12 @@ export class EmployeesService {
   getEmployee(id:string):Observable<Employee>{
     return this.http.get<Employee>(`${this.BASE_URL}employees/${id}`)
   }
+
+  createUser(user:Employee):Observable<Employee>{
+    return this.http.post<Employee>(`${this.BASE_URL}employees`, user)
+  }
+
+  updateUser( id:string, user:Employee):Observable<Employee>{
+    return this.http.patch<Employee>(`${this.BASE_URL}employees/${id}`, user)
+  }
 }

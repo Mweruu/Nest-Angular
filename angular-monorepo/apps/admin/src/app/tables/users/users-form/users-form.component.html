@@ -1,0 +1,76 @@
+<p-card [header]="editMode ? 'Update User' : 'Add User'" subheader="You can add or edit a user">
+  <div class="card">
+    <p-toolbar>
+      <div class="p-toolbar-group-start">
+      </div>
+      <div class="p-toolbar-group-end">
+        <p-button
+        [label]="editMode? 'Update':'Create'"
+        icon="pi pi-plus"
+        styleClass="p-button-primary"
+        class="mr-2"
+        (click)="onSubmit()"
+        ></p-button>
+        <p-button
+        label="Cancel"
+        icon="pi pi-arrow-circle-left"
+        styleClass="p-button-secondary"
+        class="mr-2"
+        routerLink="/users"
+        ></p-button>
+      </div>
+    </p-toolbar>
+  </div>
+  <form [formGroup]="form">
+  <div class="grid mt-2">
+      <div class="col-12 formgroup-inline">
+        <div class="col-5">
+          <label for="name">FirstName:</label>
+          <div class="p-inputgroup mt-1">
+            <input class="w-full" pInputText formControlName="firstName" placeholder="Jane" />
+          </div>
+            <small *ngIf="form.invalid && isSubmitted" class="p-error">
+              <span *ngIf="usersForm['firstName'].errors?.['required']" class="p-error">FirstName is required</span>
+            </small>
+        </div>
+        <div class="col-5">
+          <label for="name">LastName:</label>
+          <div class="p-inputgroup mt-1">
+            <input class="w-full" pInputText formControlName="lastName" placeholder="Doe" />
+          </div>
+            <small *ngIf="form.invalid && isSubmitted" class="p-error">
+              <span *ngIf="usersForm['lastName'].errors?.['required']" class="p-error">LastName is required</span>
+            </small>
+        </div>
+      </div>
+      <div class="col-12 formgroup-inline">
+        <div class="col-5">
+          <label for="name">Email:</label>
+          <div class="p-inputgroup mt-1">
+            <input class="w-full" pInputText  formControlName="email" placeholder="example@gmail.com" />
+          </div>
+            <small *ngIf="form.invalid && isSubmitted" class="p-error">
+              <span *ngIf="usersForm['email'].errors?.['required']" class="p-error">Email is required</span>
+            </small>
+        </div>
+        <div class="col-5">
+          <label for="name">Password:</label>
+          <div class="p-inputgroup mt-1">
+            <input class="w-full" pInputText formControlName="password" placeholder="45" />
+          </div>
+            <small *ngIf="form.invalid && isSubmitted" class="p-error">
+              <span *ngIf="usersForm['password'].errors?.['required']" class="p-error">Password is required</span>
+            </small>
+        </div>
+      </div>
+      <div class="col-12 formgroup-inline">
+        <div class="col-10">
+          <label for="name">Role:</label>
+          <div class="mt-1">
+            <p-selectButton [options]="roleOptions" formControlName="role" optionValue="name"optionLabel="name"/>
+          </div>
+        </div>
+      </div>
+  </div>
+  </form>
+</p-card>

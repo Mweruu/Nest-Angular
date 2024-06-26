@@ -12,7 +12,6 @@ export class LocalstorageService {
 
 
   setToken(data: any){
-    console.log(data, data.access_token, TOKEN)
     localStorage.setItem(TOKEN, data.access_token)
   }
 
