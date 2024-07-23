@@ -11,6 +11,7 @@ import { ProductsModule } from './model/products/products.module';
 import { CategoryModule } from './model/category/category.module';
 import { AppController } from './app.controller';
 import { OrdersModule } from './model/orders/orders.module';
+import { OrderproductModule } from './model/orderproduct/orderproduct.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { OrdersModule } from './model/orders/orders.module';
     ProductsModule,
     CategoryModule,
     OrdersModule,
+    OrderproductModule,
     LoggerModule.forRoot({
       pinoHttp: {
         transport: {

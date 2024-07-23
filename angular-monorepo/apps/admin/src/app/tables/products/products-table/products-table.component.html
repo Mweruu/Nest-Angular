@@ -52,18 +52,20 @@
           <th pSortableColumn="id">Id <p-sortIcon field="price"></p-sortIcon></th>
           <th pSortableColumn="customer">Customer <p-sortIcon field="customer"></p-sortIcon></th>
           <th pSortableColumn="date">Date <p-sortIcon field="date"></p-sortIcon></th>
+          <th pSortableColumn="quantity">Quantity <p-sortIcon field="quantity"></p-sortIcon></th>
           <th pSortableColumn="amount">Amount <p-sortIcon field="amount"></p-sortIcon></th>
           <th pSortableColumn="stats">Status <p-sortIcon field="status"></p-sortIcon></th>
           <th style="width: 4rem"></th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-order>
+      <ng-template pTemplate="body" let-orderline>
         <tr>
-          <td>{{order.id}}</td>
-          <td>{{order.customer}}</td>
-          <td>{{order.date}}</td>
-          <td>{{order.amount | currency:'USD'}}</td>
-          <td><span [class]="'order-badge order-' + order.status.toLowerCase()">{{order.status}}</span></td>
+          <td>{{orderline.orderId}}</td>
+          <td>{{orderline.order.customer.firstName}} {{orderline.order.customer.lastName}}</td>
+          <td>{{orderline.order.date}}</td>
+          <td>{{orderline.quantity}}</td>
+          <td>{{orderline.quantity * product.price | currency:'USD'}}</td>
+          <td><span [class]="'order-badge order-' + orderline.order.status.toLowerCase()">{{orderline.order.status}}</span></td>
           <td><p-button type="button" icon="pi pi-search"></p-button></td>
         </tr>
       </ng-template>

@@ -24,7 +24,7 @@ export class UsersFormComponent implements OnInit, OnDestroy {
     { name: 'INTERN'},
     { name: 'ENGINEER' },
     { name: 'ADMIN'}
-];
+  ];
   constructor( private fb:FormBuilder,
               private employeesService:EmployeesService,
               private router:Router,

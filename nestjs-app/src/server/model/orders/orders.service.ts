@@ -24,6 +24,10 @@ export class OrdersService {
   findOne(id: number) {
     return this.databaseService.order.findUnique({
       where: { id },
+      include: {
+        products: true,
+        customer: true,
+      },
     });
   }
 

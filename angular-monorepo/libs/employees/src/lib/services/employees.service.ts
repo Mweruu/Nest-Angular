@@ -24,6 +24,7 @@ export class EmployeesService {
   }
 
   createUser(user:Employee):Observable<Employee>{
+    console.log('got')
     return this.http.post<Employee>(`${this.BASE_URL}employees`, user)
   }
 

@@ -6,10 +6,12 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { ProductsComponent } from '@angular-monorepo/products';
 import { ProductDetailsComponent } from 'libs/products/src/lib/components/product-details/product-details.component';
 import { ProductCategoryComponent } from 'libs/products/src/lib/components/product-category/product-category.component';
+import { AuthGuardUsersideService } from '@angular-monorepo/employees';
 
 export const appRoutes: Route[] = [
  {
   path: '',
+  // canActivate:[AuthGuardUsersideService],
   component: HomePageComponent,
   pathMatch:'full'
  },

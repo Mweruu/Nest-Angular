@@ -26,7 +26,6 @@ export class ProductsTableComponent implements OnInit {
 
   getProducts(){
     this.productsService.getProducts().subscribe(products =>{
-      console.log(products);
       this.products = products;
     })
   }

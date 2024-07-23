@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { InputTextModule } from 'primeng/inputtext';
 import { SidebarModule } from 'primeng/sidebar';
 import { BadgeModule } from 'primeng/badge';
@@ -38,6 +37,7 @@ import { UsersTableComponent } from '../tables/users/users-table.component';
 import { UsersFormComponent } from '../tables/users/users-form/users-form.component';
 import { CategoriesTableComponent } from '../tables/categories/categories-table.component';
 import { CategoriesFormComponent } from '../tables/categories/categories-form/categories-form.component';
+import { OrdersTableComponent } from '../tables/orders/orders-table.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +53,7 @@ import { CategoriesFormComponent } from '../tables/categories/categories-form/ca
     UsersFormComponent,
     CategoriesTableComponent,
     CategoriesFormComponent,
+    OrdersTableComponent,
   ],
   imports: [
     EmployeesModule,

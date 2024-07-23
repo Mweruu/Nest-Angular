@@ -14,7 +14,11 @@ export class AuthService {
     if (employee?.password !== pass) {
       throw new UnauthorizedException();
     }
-    const payload = { id: employee.id, email: employee.email };
+    const payload = {
+      id: employee.id,
+      email: employee.email,
+      role: employee.role,
+    };
     // TODO: Generate a JWT and return it here
     // instead of the user object
     const access_token = await this.jwtService.signAsync(payload);
@@ -23,7 +27,11 @@ export class AuthService {
   }
 
   async login(employee: any) {
-    const payload = { email: employee.email, id: employee.id };
+    const payload = {
+      email: employee.email,
+      id: employee.id,
+      role: employee.role,
+    };
     return this.jwtService.sign(payload);
   }
 }

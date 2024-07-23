@@ -35,8 +35,9 @@
         <button pButton pRipple type="button" label="Add to Cart" class="p-button-rounded mr-2" (click)="addProductToCart()"></button> -->
       </div>
     </div>
-    <h2>DESCRIPTION</h2>
-    <div class="grid product-rich-desc" *ngIf="product">
+
+    <div class="grid product-rich-desc ml-4" *ngIf="product">
+      <h2>DESCRIPTION</h2>
       <div class="col-12">
         <div [innerHTML]="product.description"></div>
       </div>

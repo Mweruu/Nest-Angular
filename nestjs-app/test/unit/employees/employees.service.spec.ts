@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { EmployeesService } from './employees.service';
-import { DatabaseService } from '../database/database.service';
 import { Prisma, Role } from '@prisma/client';
+import { DatabaseService } from 'src/server/database/database.service';
+import { EmployeesService } from 'src/server/model/employees/employees.service';
 describe('EmployeesService', () => {
   let service: EmployeesService;
   const mockDatabaseService = {

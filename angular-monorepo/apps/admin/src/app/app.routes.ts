@@ -7,11 +7,18 @@ import { CategoriesTableComponent } from './tables/categories/categories-table.c
 import { EditProductComponent } from './tables/products/product-form/edit-product.component';
 import { UsersFormComponent } from './tables/users/users-form/users-form.component';
 import { CategoriesFormComponent } from './tables/categories/categories-form/categories-form.component';
+import { OrdersTableComponent } from './tables/orders/orders-table.component';
+import { LoginComponent } from 'libs/employees/src/lib/components/login/login.component';
+import { SignupComponent } from 'libs/employees/src/lib/components/signup/signup.component';
+import { AuthGuardService } from '@angular-monorepo/employees';
 // import { ProductsComponent } from '@angular-monorepo/products';
 
 export const appRoutes: Route[] = [
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
   {
     path: '',
+    // canActivate:[AuthGuardService],
     component: LayoutComponent,
     children:[
       {
@@ -54,7 +61,16 @@ export const appRoutes: Route[] = [
         path: 'category/form/:id',
         component: CategoriesFormComponent
       },
+      {
+        path: 'orders',
+        component: OrdersTableComponent
+      },
     ]
   },
+  {
+    path: '**',
+    redirectTo:'',
+    pathMatch:'full'
+  }
 
 ];

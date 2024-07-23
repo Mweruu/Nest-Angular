@@ -16,6 +16,7 @@ export class OrdersController {
 
   @Post()
   create(@Body() createOrderDto: Prisma.OrderCreateInput) {
+    console.log(createOrderDto);
     return this.ordersService.create(createOrderDto);
   }
 
