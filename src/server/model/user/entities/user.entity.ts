@@ -2,12 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  // OneToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-// import { Order } from '../../order/entities/order.entity';
-// import { Product } from '../../products/entities/product.entity';
+import { Order } from '../../order/entities/order.entity';
+import { Product } from '../../products/entities/product.entity';
 
 export enum Role {
   INTERN = 'INTERN',
@@ -39,11 +39,11 @@ export class User {
   @Column()
   password: string;
 
-  // @OneToMany(() => Order, (orders) => orders.id)
-  // orders: Order[];
+  @OneToMany(() => Order, (orders) => orders.id)
+  orders: Order[];
 
-  // @OneToMany(() => Product, (products) => products.id)
-  // products: Product[];
+  @OneToMany(() => Product, (products) => products.id)
+  products: Product[];
 
   @CreateDateColumn()
   createdAt: string;

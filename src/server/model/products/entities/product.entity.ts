@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Category } from '../../category/entities/category.entity';
-// import { User } from '../../user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 import { OrderProduct } from '../../order-product/entities/order-product.entity';
 
 export enum InventoryStatus {
@@ -25,8 +25,8 @@ export class Product {
   @ManyToOne(() => Category, (category) => category.products)
   category: Category;
 
-  // @ManyToOne(() => User, (customer) => customer.products)
-  // customer: User;
+  @ManyToOne(() => User, (customer) => customer.products)
+  customer: User;
 
   @OneToMany(() => OrderProduct, (orderProduct) => orderProduct.products)
   orderProduct: OrderProduct;
