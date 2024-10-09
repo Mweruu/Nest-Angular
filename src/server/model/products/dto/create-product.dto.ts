@@ -2,6 +2,7 @@ import { IsAlphanumeric, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { InventoryStatus } from '../entities/product.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import { Category } from '../../category/entities/category.entity';
+import { User } from '../../user/entities/user.entity';
 
 export class CreateProductDto {
   @ApiProperty({
@@ -40,6 +41,19 @@ export class CreateProductDto {
     example: [{'name': 'Home and Office'}, {'color': 'Green'}, {'icon': 'Desktop'},],
   })
   category: Category;
+
+  @ApiProperty({
+    example: [{
+      "firstName": "Jane",
+      "lastName": "Jane",
+      "email": "jane@gmail.com",
+      "role": "ADMIN",
+      "orders": [],
+      "products": [],
+      "password": "Mweru123"
+    }],
+  })
+  customer: User
 
   @ApiProperty({
     example: 'LOWSTOCK',

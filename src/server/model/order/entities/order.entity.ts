@@ -2,12 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  // ManyToOne,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { OrderProduct } from '../../order-product/entities/order-product.entity';
-// import { User } from '../../user/entities/user.entity';
+import { User } from '../../user/entities/user.entity';
 
 export enum OrderStatus {
   PENDING = 'PENDING',
@@ -29,8 +29,8 @@ export class Order {
   @Column()
   amount: number;
 
-  // @ManyToOne(() => User, (customer) => customer.orders)
-  // customer: User;
+  @ManyToOne(() => User, (customer) => customer.orders)
+  customer: User;
 
   @OneToMany(() => OrderProduct, (products) => products.order)
   products: OrderProduct[];

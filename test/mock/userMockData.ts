@@ -1,4 +1,3 @@
-// import { OrderStatus } from 'src/server/model/order/entities/order.entity';
 import { Order, OrderStatus } from '../../src/server/model/order/entities/order.entity';
 import { Role, User } from '../../src/server/model/user/entities/user.entity';
 import { InventoryStatus, Product } from '../../src/server/model/products/entities/product.entity';
@@ -29,8 +28,9 @@ const newUser = {
   email: 'jane@example.com',
   role: 'ADMIN',
   password: 'Mweru123',
-  // orders: [],
-  // message: 'user created',
+  orders: [],
+  products: [],
+  message: 'user created',
 };
 
 const createdUser = {
@@ -141,37 +141,37 @@ const users = [
         ],
       },
     ],
-    // products: [
-    //   {
-    //     id: 10,
-    //     inventoryStatus: InventoryStatus.LOWSTOCK,
-    //     name: 'Denim',
-    //     price: 1500,
-    //     code: 'fTH6frgvcv',
-    //     quantity: 15,
-    //     description: 'trousers',
-    //     createdAt: '2024-07-26T07:31:17.846Z',
-    //     updatedAt: '2024-07-26T07:31:17.846Z',
-    //     customer: null,
-    //     orderProduct: [
-    //       {
-    //         id: 1,
-    //         quantity: 2,
-    //         amount: 300,
-    //         createdAt: '2024-07-26T11:55:52.500Z',
-    //         updatedAt: '2024-07-26T11:55:52.500Z',
-    //       },
-    //     ],
-    //     category: {
-    //       id: 1,
-    //       name: 'Desktop',
-    //       color: 'green',
-    //       icon: 'desktop',
-    //       createdAt: '2024-07-25T15:06:54.451Z',
-    //       updatedAt: '2024-07-25T15:06:54.451Z',
-    //     },
-    //   },
-    // ],
+    products: [
+      {
+        id: 10,
+        inventoryStatus: InventoryStatus.LOWSTOCK,
+        name: 'Denim',
+        price: 1500,
+        code: 'fTH6frgvcv',
+        quantity: 15,
+        description: 'trousers',
+        createdAt: '2024-07-26T07:31:17.846Z',
+        updatedAt: '2024-07-26T07:31:17.846Z',
+        customer: null,
+        orderProduct: [
+          {
+            id: 1,
+            quantity: 2,
+            amount: 300,
+            createdAt: '2024-07-26T11:55:52.500Z',
+            updatedAt: '2024-07-26T11:55:52.500Z',
+          },
+        ],
+        category: {
+          id: 1,
+          name: 'Desktop',
+          color: 'green',
+          icon: 'desktop',
+          createdAt: '2024-07-25T15:06:54.451Z',
+          updatedAt: '2024-07-25T15:06:54.451Z',
+        },
+      },
+    ],
   },
 ];
 
