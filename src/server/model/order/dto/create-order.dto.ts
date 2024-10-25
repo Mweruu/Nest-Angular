@@ -5,14 +5,6 @@ import { User } from "../../user/entities/user.entity";
 import { OrderStatus } from "../entities/order.entity";
 
 export class CreateOrderDto {
-
-@ApiProperty({
-    example: '1'
-})
-@IsString()
-@IsNotEmpty()
-id: number;
-
 @ApiProperty({
     example: 'PENDING'
 })

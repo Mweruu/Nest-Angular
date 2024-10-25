@@ -16,12 +16,12 @@ export class OrderService {
     private orderRepository: Repository<Order>,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto) {
+  async create(createOrderDto: CreateOrderDto): Promise<{ message: string }>{
     try {
       const newOrder = this.orderRepository.create(createOrderDto);
       console.log(newOrder);
-      return this.orderRepository.save(newOrder);
-      // return { message: 'Order created' };
+      await this.orderRepository.save(newOrder);
+      return { message: 'Order created' };
     } catch (error) {
       throw new InternalServerErrorException('Failed to create product');
     }
@@ -50,6 +50,9 @@ export class OrderService {
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} order`;
-  }
+    const orderToRemove = await this.orderRepository.findOneBy({ id });
+    if (!orderToRemove) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
+    }
+    await this.orderRepository.delete(orderToRemove);  }
 }

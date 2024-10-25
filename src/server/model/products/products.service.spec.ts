@@ -66,7 +66,7 @@ describe('ProductsService', () => {
     //   const response = await service.findOne(productId);
     //   expect(response).toEqual(existingProduct);
     //   expect(mockProductRepository.findOneBy).toHaveBeenCalled();
-    //   expect(mockProductRepository.findOneBy).toHaveBeenCalledWith(productId);
+    //   expect(mockProductRepository.findOneBy).toHaveBeenCalledWith({"id":productId});
     // });
   });
 

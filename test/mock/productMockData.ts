@@ -92,7 +92,8 @@ const products = [
 
 const existingProduct = new Product();
     existingProduct.id = 1,
-    existingProduct.category = {           id: 1,
+    existingProduct.category = {           
+        id: 1,
         name: 'Desktop',
         color: 'green',
         icon: 'desktop',

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { OrderProductService } from './order-product.service';
 import { OrderProduct } from './entities/order-product.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { mockDatabaseService } from '../../../../test/mock/userMockData';
+import { mockOrderRepository } from '../../../../test/mock/orderMockData';
 
 describe('OrderProductService', () => {
   let service: OrderProductService;
@@ -13,7 +13,7 @@ describe('OrderProductService', () => {
         OrderProductService,
         {
           provide: getRepositoryToken(OrderProduct),
-          useValue: mockDatabaseService,
+          useValue: mockOrderRepository,
         },
       ],
     }).compile();
@@ -23,5 +23,50 @@ describe('OrderProductService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('create', () => {
+    it('should be defined', () => {
+      expect(service.create).toBeDefined();
+    });
+
+    // it('should create a new orderproduct', () => {})
+  });
+
+  describe('findall', () => {
+    it('should be defined', () => {
+      expect(service.findAll).toBeDefined();
+    });
+    
+    // it('should return all orderproducts', () => {})
+  });
+
+  describe('findone', () => {
+    it('should be defined', () => {
+      expect(service.findOne).toBeDefined();
+    });
+
+    // it('should return an orderproduct with the given id', () => {})
+
+  });
+
+
+  describe('update', () => {
+    it('should be defined', () => {
+      expect(service.update).toBeDefined();
+    });
+
+    // it('', () => {})
+
+  });
+
+
+  describe('remove', () => {
+    it('should be defined', () => {
+      expect(service.remove).toBeDefined();
+    });
+
+    // it('', () => {})
+
   });
 });
