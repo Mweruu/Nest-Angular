@@ -29,7 +29,7 @@ amount: number;
 
 
 @ApiProperty({
-    example: []
+    example: 3
 })
 customer: User;
 

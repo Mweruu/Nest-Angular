@@ -13,10 +13,10 @@ export class OrderProduct {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Order, (order) => order.id)
+  @ManyToOne(() => Order, (order) => order.products)
   order: Order;
 
-  @ManyToOne(() => Product, (products) => products.id)
+  @ManyToOne(() => Product, (products) => products.orderProduct)
   products: Product[];
 
   @Column()

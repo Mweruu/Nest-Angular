@@ -8,6 +8,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 
 describe('ProductsController', () => {
   let controller: ProductsController;
+  let productsService:ProductsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -19,6 +20,7 @@ describe('ProductsController', () => {
     }).compile();
 
     controller = module.get<ProductsController>(ProductsController);
+    productsService = module.get<ProductsService>(ProductsService);
   });
 
   it('should be defined', () => {
@@ -30,11 +32,11 @@ describe('ProductsController', () => {
       expect(controller.create).toBeDefined();
     });
     it('should create a new product', async () => {
-      jest.spyOn(controller, 'create').mockResolvedValue(newProduct);
+      jest.spyOn(productsService, 'create').mockResolvedValue(newProduct);
       const result = await controller.create(newProduct as unknown as CreateProductDto);
       expect(result).toEqual(newProduct);
-      expect(controller.create).toHaveBeenCalled();
-      expect(controller.create).toHaveBeenCalledWith(newProduct);
+      expect(productsService.create).toHaveBeenCalled();
+      expect(productsService.create).toHaveBeenCalledWith(newProduct);
     });
 
   });
@@ -44,10 +46,10 @@ describe('ProductsController', () => {
       expect(controller.findAll).toBeDefined();
     });
     it('should return all available products', async() => {
-      jest.spyOn(controller, 'findAll').mockResolvedValue(products);
+      jest.spyOn(productsService, 'findAll').mockResolvedValue(products);
       const response = await controller.findAll();
       expect(response).toEqual(products);
-      expect(controller.findAll).toHaveBeenCalled();
+      expect(productsService.findAll).toHaveBeenCalled();
     });
   });
 
@@ -56,11 +58,11 @@ describe('ProductsController', () => {
       expect(controller.findOne).toBeDefined();
     });
     it('should return a product with the given id', async () => {
-      jest.spyOn(controller, 'findOne').mockResolvedValue(existingProduct);
+      jest.spyOn(productsService, 'findOne').mockResolvedValue(existingProduct);
       const response = await controller.findOne(productId);
       expect(response).toEqual(existingProduct);
-      expect(controller.findOne).toHaveBeenCalled();
-      expect(controller.findOne).toHaveBeenCalledWith(productId)
+      expect(productsService.findOne).toHaveBeenCalled();
+      expect(productsService.findOne).toHaveBeenCalledWith(productId)
     });
   });
 
@@ -69,11 +71,11 @@ describe('ProductsController', () => {
       expect(controller.update).toBeDefined();
     });
     it('should update the product with the given id', async () => {
-      jest.spyOn(controller, 'update').mockResolvedValue(updatedProduct);
+      jest.spyOn(productsService, 'update').mockResolvedValue(updatedProduct);
       const response = await controller.update(productId, updatedProduct)
       expect(response).toEqual(updatedProduct);
-      expect(controller.update).toHaveBeenCalled();
-      expect(controller.update).toHaveBeenCalledWith(productId, updatedProduct)
+      expect(productsService.update).toHaveBeenCalled();
+      expect(productsService.update).toHaveBeenCalledWith(productId, updatedProduct)
     });
   });
 
@@ -82,13 +84,12 @@ describe('ProductsController', () => {
       expect(controller.remove).toBeDefined();
     });
     it('should delete a product', async () => {
-      jest.spyOn(controller, 'remove').mockResolvedValue(undefined);
+      jest.spyOn(productsService, 'remove').mockResolvedValue(undefined);
       const response = await controller.remove(productId);
-      console.log("response", response)
       expect(response).toEqual(undefined);
       expect(response).toBeUndefined();
-      expect(controller.remove).toHaveBeenCalled();
-      expect(controller.remove).toHaveBeenCalledWith(productId);
+      expect(productsService.remove).toHaveBeenCalled();
+      expect(productsService.remove).toHaveBeenCalledWith(productId);
     });
   });
 });

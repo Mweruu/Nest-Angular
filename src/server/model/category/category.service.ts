@@ -13,16 +13,19 @@ export class CategoryService {
   ) {}
   async create(createCategoryDto: CreateCategoryDto) {
     const newCategory = this.categoryRepository.create(createCategoryDto);
-    await this.categoryRepository.save(newCategory);
-    return { message: 'New category created' };
+    const savedCategory = await this.categoryRepository.save(newCategory);
+    return { message: 'New Category Created', id: savedCategory.id };
   }
 
   async findAll() {
-    return await this.categoryRepository.find();
+    return await this.categoryRepository.find({ relations: ['products'] });
   }
 
   async findOne(id: number) {
-    const category = await this.categoryRepository.findOneBy({ id });
+    const category = await this.categoryRepository.findOne({ 
+      where: { id },
+      relations: ['products'],
+     });
     if (!category) {
       throw new NotFoundException(`category with id ${id} not found`);
     }
@@ -38,7 +41,10 @@ export class CategoryService {
     return await this.categoryRepository.save(category);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number) {
+    const result = await this.categoryRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    };
   }
 }

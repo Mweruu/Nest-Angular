@@ -39,10 +39,10 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Order, (orders) => orders.id)
+  @OneToMany(() => Order, (orders) => orders.customer)
   orders: Order[];
 
-  @OneToMany(() => Product, (products) => products.id)
+  @OneToMany(() => Product, (products) => products.customer)
   products: Product[];
 
   @CreateDateColumn()

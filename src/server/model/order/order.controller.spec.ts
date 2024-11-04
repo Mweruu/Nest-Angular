@@ -8,6 +8,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 
 describe('OrderController', () => {
   let controller: OrderController;
+  let orderService: OrderService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -22,6 +23,7 @@ describe('OrderController', () => {
     }).compile();
 
     controller = module.get<OrderController>(OrderController);
+    orderService = module.get<OrderService>(OrderService);
   });
 
   it('should be defined', () => {
@@ -34,11 +36,11 @@ describe('OrderController', () => {
     });
 
     it('should create a new order', async () => {
-      jest.spyOn(controller, 'create').mockResolvedValue(newOrder);
+      jest.spyOn(orderService, 'create').mockResolvedValue(newOrder);
       const response = await controller.create(newOrder as unknown as CreateOrderDto);
       expect(response).toEqual(newOrder);
-      expect(controller.create).toHaveBeenCalled();
-      expect(controller.create).toHaveBeenCalledWith(newOrder)
+      expect(orderService.create).toHaveBeenCalled();
+      expect(orderService.create).toHaveBeenCalledWith(newOrder)
     });
   });
 
@@ -48,10 +50,10 @@ describe('OrderController', () => {
     });
 
     it('should return all orders', async () => {
-      jest.spyOn(controller, 'findAll').mockResolvedValue(orders);
+      jest.spyOn(orderService, 'findAll').mockResolvedValue(orders);
       const response = await controller.findAll();
       expect(response).toEqual(orders);
-      expect(controller.findAll).toHaveBeenCalled();
+      expect(orderService.findAll).toHaveBeenCalled();
     });
   });
 
@@ -61,11 +63,11 @@ describe('OrderController', () => {
     });
 
     it('should return an order with the given id', async() => {
-      jest.spyOn(controller, 'findOne').mockResolvedValue(existingOrder);
+      jest.spyOn(orderService, 'findOne').mockResolvedValue(existingOrder);
       const response = await controller.findOne(orderId);
       expect(response).toEqual(existingOrder);
-      expect(controller.findOne).toHaveBeenCalled();
-      expect(controller.findOne).toHaveBeenCalledWith(orderId);
+      expect(orderService.findOne).toHaveBeenCalled();
+      expect(orderService.findOne).toHaveBeenCalledWith(orderId);
     });
   });
 
@@ -75,11 +77,11 @@ describe('OrderController', () => {
     });
 
     it('should update the order with the given id', async() => {
-      jest.spyOn(controller, 'update').mockResolvedValue(updatedOrder);
+      jest.spyOn(orderService, 'update').mockResolvedValue(updatedOrder);
       const response = await controller.update(orderId, updatedOrder);
       expect(response).toEqual(updatedOrder);
-      expect(controller.update).toHaveBeenCalled();
-      expect(controller.update).toHaveBeenCalledWith(orderId, updatedOrder);
+      expect(orderService.update).toHaveBeenCalled();
+      expect(orderService.update).toHaveBeenCalledWith(orderId, updatedOrder);
     });
   });
 
@@ -89,12 +91,11 @@ describe('OrderController', () => {
     });
 
     it('should delete the order with the given id', async () => {
-      jest.spyOn(controller, 'remove').mockResolvedValue(undefined);
+      jest.spyOn(orderService, 'remove').mockResolvedValue(undefined);
       const response = await controller.remove(orderId);
-      console.log("delete order", response)
       expect(response).toEqual(undefined);
-      expect(controller.remove).toHaveBeenCalled();
-      expect(controller.remove).toHaveBeenCalledWith(orderId);
+      expect(orderService.remove).toHaveBeenCalled();
+      expect(orderService.remove).toHaveBeenCalledWith(orderId);
     });
   });
 });

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
+import { Role, User } from './entities/user.entity';
 import {
   createdUser,
   mockUserRepository,
@@ -12,7 +12,7 @@ import {
   existingUser,
   updatedUser,
 } from './../../../../test/mock/userMockData';
-import { InternalServerErrorException } from '@nestjs/common';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 
 describe('UserService', () => {
@@ -32,14 +32,6 @@ describe('UserService', () => {
     service = module.get<UserService>(UserService);
   });
 
-  console.log(
-    'createf',
-    mockUserRepository.createf(),
-    mockUserRepository.createf(),
-    mockUserRepository.createf(),
-    mockUserRepository.createf(),
-  );
-
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
@@ -47,12 +39,21 @@ describe('UserService', () => {
   describe('UsersCreateService', () => {
     it('should have a typeof function', () => {
       expect(typeof service.create).toBe('function');
+      expect(typeof createdUser.id).toBe('number');
+      expect(typeof createdUser.email).toBe('string');
+      expect(typeof createdUser.firstName).toBe('string');
+      expect(typeof createdUser.lastName).toBe('string');
+      expect(typeof createdUser.password).toBe('string');
+      expect(Object.values(Role)).toContain(createdUser.role);
+      expect(Array.isArray(createdUser.orders)).toBe(true);
+      expect(Array.isArray(createdUser.products)).toBe(true);
     });
+
     it('should create a user and return a message', async () => {
       mockUserRepository.create.mockReturnValue(createdUser);
       mockUserRepository.save.mockResolvedValue(createdUser);
       const result = await service.create(newUser as unknown as CreateUserDto);
-      expect(result).toEqual({ message: 'user created' });
+      expect(result).toEqual({ message: 'user created', id: userId });
       expect(mockUserRepository.create).toHaveBeenCalledWith(newUser);
       expect(mockUserRepository.create).toHaveBeenCalled();
       expect(mockUserRepository.save).toHaveBeenCalledWith(createdUser);
@@ -91,18 +92,50 @@ describe('UserService', () => {
     });
   });
 
-  describe('UsersFindOneService', () => {
+  describe('UsersFindOneService by id', () => {
     it('should have a typeof function', () => {
       expect(typeof service.findOne).toBe('function');
     });
 
-    it('should Update a user', async () => {
-      mockUserRepository.findOneBy.mockResolvedValue(existingUser);
+    it('should find one user', async () => {
+      mockUserRepository.findOne.mockResolvedValue(existingUser);
       const result = await service.findOne(userId);
 
       // Assertions
       expect(result).toEqual(existingUser);
-      expect(mockUserRepository.findOneBy).toHaveBeenCalledWith({ id: userId });
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({ 
+        where: { id: 1 },
+        relations: ['orders']
+      });
+    });
+
+    it('should throw an error if user id is not found', async () => {
+      mockUserRepository.findOne.mockResolvedValue(undefined);
+      await expect(service.findOne(userId)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+
+  describe('UsersFindOneService by email', () => {
+    it('should have a typeof function', () => {
+      expect(typeof service.findOneUser).toBe('function');
+    });
+
+    it('should find one user', async () => {
+      mockUserRepository.findOne.mockResolvedValue(existingUser);
+      const result = await service.findOneUser(newUser.email);
+
+      // Assertions
+      expect(result).toEqual(existingUser);
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({ 
+        where: { email: newUser.email },
+        relations: ['orders']
+      });
+    });
+
+    it('should throw an error if user id is not found', async () => {
+      mockUserRepository.findOne.mockResolvedValue(undefined);
+      await expect(service.findOneUser(newUser.email)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -128,6 +161,11 @@ describe('UserService', () => {
       expect(mockUserRepository.findOneBy).toHaveBeenCalledWith({ id: userId }); // Check if findOneBy was called with correct userId
       expect(mockUserRepository.save).toHaveBeenCalledWith(updatedUser);
     });
+
+    it('should throw an error if user id is not found', async () => {
+      mockUserRepository.findOneBy.mockResolvedValue(undefined);
+      await expect(service.update(userId, updateUserDto)).rejects.toThrow(NotFoundException);
+    });
   });
 
   describe('UsersRemoveService', () => {
@@ -135,18 +173,17 @@ describe('UserService', () => {
       expect(typeof service.remove).toBe('function');
     });
 
-    it('should delete a user', async () => {
-      mockUserRepository.findOneBy.mockResolvedValue(existingUser);
-      mockUserRepository.delete.mockResolvedValue(existingUser);
-      // mockUserRepository.delete.mockResolvedValue(1);
-      const result = await service.remove(userId);
+    it('should delete an entity successfully when it exists', async () => {
+      mockUserRepository.delete.mockResolvedValue({ affected: 1 });
+      await service.remove(userId); 
+      expect(mockUserRepository.delete).toHaveBeenCalledWith(userId);
+    });
 
-      // Assertions
-      expect(result).toEqual(undefined);
-      expect(mockUserRepository.findOneBy).toHaveBeenCalled();
-      expect(mockUserRepository.findOneBy).toHaveBeenCalledWith({ id: userId });
-      expect(mockUserRepository.delete).toHaveBeenCalledWith(existingUser);
-      expect(mockUserRepository.delete).toHaveBeenCalled();
+    it('should throw a NotFoundException when the entity does not exist', async () => {
+      mockUserRepository.delete.mockResolvedValue({ affected: 0 });
+      // await expect(service.remove(1)).rejects.toThrow(NotFoundException);
+      await expect(service.remove(1)).rejects.toBeInstanceOf(NotFoundException);
+      expect(mockUserRepository.delete).toHaveBeenCalledWith(1);
     });
   });
 });

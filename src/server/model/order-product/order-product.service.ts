@@ -11,20 +11,23 @@ export class OrderProductService {
     @InjectRepository(OrderProduct)
     private orderProductRepository: Repository<OrderProduct>,
   ) {}
-  async create(createOrderProductDto: CreateOrderProductDto) {
+  async create(createOrderProductDto: CreateOrderProductDto): Promise<{ message: string, id?:number }>{
     const newOrderProduct = this.orderProductRepository.create(
       createOrderProductDto,
     );
-    this.orderProductRepository.save(newOrderProduct);
-    return { message: 'Order Product Created' };
+    const savedOP = await this.orderProductRepository.save(newOrderProduct);
+    return { message: 'Order Product Created', id: savedOP.id };
   }
 
   async findAll() {
-    return await this.orderProductRepository.find();
+    return await this.orderProductRepository.find({ relations: ['order', 'products'] });
   }
 
   async findOne(id: number) {
-    const user = await this.orderProductRepository.findOneBy({ id });
+    const user = await this.orderProductRepository.findOne({
+      where: { id },
+      relations: ['order', 'products'],
+    });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
@@ -42,6 +45,9 @@ export class OrderProductService {
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} orderProduct`;
-  }
+    const result = await this.orderProductRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`OP with ID ${id} not found`);
+    };
+  }  
 }

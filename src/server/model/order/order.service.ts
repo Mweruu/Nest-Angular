@@ -16,23 +16,25 @@ export class OrderService {
     private orderRepository: Repository<Order>,
   ) {}
 
-  async create(createOrderDto: CreateOrderDto): Promise<{ message: string }>{
+  async create(createOrderDto: CreateOrderDto): Promise<{ message: string, id:number }>{
     try {
       const newOrder = this.orderRepository.create(createOrderDto);
-      console.log(newOrder);
-      await this.orderRepository.save(newOrder);
-      return { message: 'Order created' };
+      const savedOrder = await this.orderRepository.save(newOrder);
+      return { message: 'Order Created', id:savedOrder.id };
     } catch (error) {
       throw new InternalServerErrorException('Failed to create product');
     }
   }
 
   async findAll() {
-    return this.orderRepository.find({ relations: ['customer'] });
+    return this.orderRepository.find({ relations: ['customer', 'products'] });
   }
 
   async findOne(id: number) {
-    const order = await this.orderRepository.findOneBy({ id });
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['customer', 'products'] 
+    });
     if (!order) {
       throw new NotFoundException(`order with ID ${id} not found`);
     }
@@ -50,9 +52,9 @@ export class OrderService {
   }
 
   async remove(id: number) {
-    const orderToRemove = await this.orderRepository.findOneBy({ id });
-    if (!orderToRemove) {
-      throw new NotFoundException(`Product with ID ${id} not found`);
-    }
-    await this.orderRepository.delete(orderToRemove);  }
+    const result = await this.orderRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`Order with ID ${id} not found`);
+    };
+  }
 }

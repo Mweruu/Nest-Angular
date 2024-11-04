@@ -26,20 +26,20 @@ export class OrderProductController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.orderProductService.findOne(+id);
+  findOne(@Param('id') id: number) {
+    return this.orderProductService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateOrderProductDto: UpdateOrderProductDto,
   ) {
-    return this.orderProductService.update(+id, updateOrderProductDto);
+    return this.orderProductService.update(id, updateOrderProductDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.orderProductService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.orderProductService.remove(id);
   }
 }

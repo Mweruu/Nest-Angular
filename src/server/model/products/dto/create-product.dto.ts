@@ -38,20 +38,22 @@ export class CreateProductDto {
   code: string;
 
   @ApiProperty({
-    example: [{'name': 'Home and Office'}, {'color': 'Green'}, {'icon': 'Desktop'},],
+    example: 1,
+    // [{'name': 'Home and Office'}, {'color': 'Green'}, {'icon': 'Desktop'},],
   })
   category: Category;
 
   @ApiProperty({
-    example: [{
-      "firstName": "Jane",
-      "lastName": "Jane",
-      "email": "jane@gmail.com",
-      "role": "ADMIN",
-      "orders": [],
-      "products": [],
-      "password": "Mweru123"
-    }],
+    example: 2, 
+    // [{
+    //   "firstName": "Jane",
+    //   "lastName": "Jane",
+    //   "email": "jane@gmail.com",
+    //   "role": "ADMIN",
+    //   "orders": [],
+    //   "products": [],
+    //   "password": "Mweru123"
+    // }],
   })
   customer: User
 

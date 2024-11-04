@@ -17,26 +17,24 @@ export class ProductsService {
 
   async create(
     createProductDto: CreateProductDto,
-  ): Promise<{ message: string }> {
+  ): Promise<{ message: string, id?:number }> {
     try {
       const newProduct = this.productRepository.create(createProductDto);
-      console.log("fghffhghfg", newProduct);
-      await this.productRepository.save(newProduct);
-      return { message: `Product Created` };
+      const savedProduct = await this.productRepository.save(newProduct);
+      return { message: `Product Created`, id: savedProduct.id };
     } catch (error) {
-      console.log(error);
       throw new InternalServerErrorException('Failed to create product');
     }
   }
 
   async findAll() {
-    return this.productRepository.find({ relations: ['category'] });
+    return this.productRepository.find({ relations: ['category', 'customer'] });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number) : Promise<Product | null>{
     const product = await this.productRepository.findOne({
       where: { id },
-      relations: ['category'],
+      relations: ['category', 'customer'],
     });
     if (!product) {
       throw new NotFoundException(`Product with ID ${id} not found`);
@@ -55,10 +53,9 @@ export class ProductsService {
   }
 
   async remove(id: number) {
-    const productToRemove = await this.productRepository.findOneBy({ id });
-    if (!productToRemove) {
+    const result = await this.productRepository.delete(id);
+    if (result.affected === 0) {
       throw new NotFoundException(`Product with ID ${id} not found`);
-    }
-    await this.productRepository.delete(productToRemove);
+    };
   }
 }

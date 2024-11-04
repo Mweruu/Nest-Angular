@@ -2,9 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { mockDatabaseService } from '../../../../test/mock/userMockData';
 import { createdProduct, existingProduct, mockProductRepository, newProduct, productId, products, updatedProduct } from '../../../../test/mock/productMockData';
 import { CreateProductDto } from './dto/create-product.dto';
+import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { Category } from '../category/entities/category.entity';
+import { OrderProduct } from '../order-product/entities/order-product.entity';
+import { User } from '../user/entities/user.entity';
 
 describe('ProductsService', () => {
   let service: ProductsService;
@@ -36,11 +39,23 @@ describe('ProductsService', () => {
       mockProductRepository.create.mockReturnValue(createdProduct);
       mockProductRepository.save.mockResolvedValue(createdProduct);
       const result = await service.create(newProduct as unknown as CreateProductDto);
-      expect(result).toEqual({ message: 'Product Created' });
+      expect(result).toEqual({ message: 'Product Created',id: productId });
       expect(mockProductRepository.create).toHaveBeenCalledWith(newProduct);
       expect(mockProductRepository.create).toHaveBeenCalled();
       expect(mockProductRepository.save).toHaveBeenCalledWith(createdProduct);
     });
+
+    it('should throw an InternalServerErrorException if save fails', async () => {
+      const newProduct = { name: 'Test Product', price: 100 } as CreateProductDto;
+
+      mockProductRepository.create.mockReturnValue(newProduct);
+      mockProductRepository.save.mockRejectedValue(new Error('Database Error'));
+
+      await expect(service.create(newProduct)).rejects.toThrow(InternalServerErrorException);
+      expect(mockProductRepository.create).toHaveBeenCalledWith(newProduct);
+      expect(mockProductRepository.save).toHaveBeenCalledWith(newProduct);
+    });
+
   });
 
   describe('find all products', () => {
@@ -61,13 +76,26 @@ describe('ProductsService', () => {
       expect(service.findOne).toBeDefined();
     });
 
-    // it('should return a specific product', async () => {
-    //   mockProductRepository.findOneBy.mockResolvedValue(existingProduct);
-    //   const response = await service.findOne(productId);
-    //   expect(response).toEqual(existingProduct);
-    //   expect(mockProductRepository.findOneBy).toHaveBeenCalled();
-    //   expect(mockProductRepository.findOneBy).toHaveBeenCalledWith({"id":productId});
-    // });
+    it('should return a specific product', async () => {
+      mockProductRepository.findOne.mockResolvedValue(existingProduct);
+      const response = await service.findOne(productId);
+      expect(response).toEqual(existingProduct);
+      expect(mockProductRepository.findOne).toHaveBeenCalled();
+      expect(mockProductRepository.findOne).toHaveBeenCalledWith({
+        where: { id: productId },
+        relations: ['category', 'customer'],
+      });
+    });
+
+    it('should throw a NotFoundException when the product does not exist', async () => {
+      mockProductRepository.findOne.mockResolvedValue(undefined);
+      await expect(service.findOne(productId)).rejects.toThrow(NotFoundException);
+      expect(mockProductRepository.findOne).toHaveBeenCalledWith({
+        where: { id: 1 },
+        relations: ['category', 'customer'],
+      });
+    });
+
   });
 
   describe('update product with the given id', () => {
@@ -87,6 +115,10 @@ describe('ProductsService', () => {
       expect(mockProductRepository.save).toHaveBeenCalledWith(updatedProduct);
     })
 
+    it('should throw an error if category id is not found', async () => {
+      mockProductRepository.findOneBy.mockResolvedValue(undefined);
+      await expect(service.update(productId, existingProduct)).rejects.toThrow(NotFoundException);
+    });
 
   });
 
@@ -95,16 +127,51 @@ describe('ProductsService', () => {
       expect(service.remove).toBeDefined();
     });
 
-    it('should delete a product', async () => {
-      mockProductRepository.findOneBy.mockResolvedValue(existingProduct);
-      mockProductRepository.delete.mockResolvedValue(existingProduct);
-      const response = await service.remove(productId);
-      console.log("response", response)
-      expect(response).toEqual(undefined);
-      expect(mockProductRepository.findOneBy).toHaveBeenCalled();
-      expect(mockProductRepository.findOneBy).toHaveBeenCalledWith({"id":productId});
-      expect(mockProductRepository.delete).toHaveBeenCalled();
-      expect(mockProductRepository.delete).toHaveBeenCalledWith(existingProduct);   
+    it('should delete an entity successfully when it exists', async () => {
+      mockProductRepository.delete.mockResolvedValue({ affected: 1 });
+      await service.remove(productId); 
+      expect(mockProductRepository.delete).toHaveBeenCalledWith(productId);
+    });
+
+    it('should throw a NotFoundException when the entity does not exist', async () => {
+      mockProductRepository.delete.mockResolvedValue({ affected: 0 });
+      await expect(service.remove(1)).rejects.toThrow(NotFoundException);
+      expect(mockProductRepository.delete).toHaveBeenCalledWith(1);
     });
   });
+
+  describe('Order Entity Relationships', () => {
+    let product: Product;
+
+    beforeEach(() => {
+      product = new Product();
+    });
+
+    it('should have a ManyToOne relationship with Category', () => {
+        const category = new Category();
+        product.category = category;
+
+        expect(product.category).toBe(category);
+        expect(product.category).toBeInstanceOf(Category);
+    });
+
+    it('should have a ManyToOne relationship with User as customer', () => {
+        const customer = new User();
+        product.customer = customer;
+
+        expect(product.customer).toBe(customer);
+        expect(product.customer).toBeInstanceOf(User);
+    });
+
+    // it('should have a OneToMany relationship with OrderProduct', () => {
+    //     const orderProduct1 = new OrderProduct();
+    //     const orderProduct2 = new OrderProduct();
+    //     product.orderProduct = [orderProduct1, orderProduct2];
+
+    //     expect(product.orderProduct).toContain(orderProduct1);
+    //     expect(product.orderProduct).toContain(orderProduct2);
+    //     expect(product.orderProduct[0]).toBeInstanceOf(OrderProduct);
+    //     expect(product.orderProduct.length).toBe(2);
+    // });
+});
 });

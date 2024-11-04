@@ -4,21 +4,22 @@ import { Order, OrderStatus } from "../../src/server/model/order/entities/order.
 const mockOrderRepository = {
     create: jest.fn(),
     find: jest.fn(),
+    findOne: jest.fn(),
     findOneBy: jest.fn(),
     save: jest.fn(),
     delete: jest.fn(),
 };
 
+const orderId = 1
+
 const newOrder = {
     status: "PENDING",
     quantity: 4,
     amount: 300,
-    customer: {},
+    customer: 3,
     products: [],
-    createdAt: "2024-10-09T08:44:55.727Z",
-    updatedAt: "2024-10-09T08:44:55.727Z",
-    message: 'Order created',
-
+    message: 'Order Created',
+    id: orderId
   }
 
 const createdOrder= {
@@ -49,7 +50,6 @@ const existingOrder = new Order();
     existingOrder.customer= null,
     existingOrder.products= []
 
-const orderId = 1
 
 const updatedOrder = { ...existingOrder, ...UpdateOrderDto}
 

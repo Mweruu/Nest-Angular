@@ -1,13 +1,13 @@
 import { UpdateProductDto } from "../../src/server/model/products/dto/update-product.dto";
 import { Category } from "../../src/server/model/category/entities/category.entity";
 import { InventoryStatus, Product } from "../../src/server/model/products/entities/product.entity";
-import { Role } from "../../src/server/model/user/entities/user.entity";
 import { OrderStatus } from "../../src/server/model/order/entities/order.entity";
 
 const mockProductRepository = {
     create: jest.fn(),
     find: jest.fn(),
     findOneBy: jest.fn(),
+    findOne: jest.fn(),
     save: jest.fn(),
     delete: jest.fn(),
 };
@@ -16,6 +16,7 @@ const mockDatabaseService = {
     create: jest.fn(),
     find: jest.fn(),
     findOneBy: jest.fn(),
+    findOne: jest.fn(),
     save: jest.fn(),
     delete: jest.fn(),
 };
@@ -28,7 +29,8 @@ const newProduct = {
     description:'Desk',
     code:  'Trb564CQ1',
     category: [
-        {   'id': 1,
+        {   
+            'id': 1,
             'name':'Home and Office', 
             'color': 'Green', 
             'icon': 'Desktop',
@@ -91,7 +93,7 @@ const products = [
 ]
 
 const existingProduct = new Product();
-    existingProduct.id = 1,
+    existingProduct.id = 1;
     existingProduct.category = {           
         id: 1,
         name: 'Desktop',
@@ -99,25 +101,13 @@ const existingProduct = new Product();
         icon: 'desktop',
         products: [],
         createdAt: '2024-07-25T15:06:54.451Z',
-        updatedAt: '2024-07-25T15:06:54.451Z',},
-    existingProduct.code = 'fTH6frgvcv',
-    existingProduct.customer = 
-        {
-            "id": 1,
-            "firstName": "Jane",
-            "lastName": "Jane",
-            "email": "jane@gmail.com",
-            "role": Role.ADMIN,
-            "orders": [],
-            "products": [],
-            "password": "Mweru123",
-            createdAt: '2024-07-25T15:06:54.451Z',
-            updatedAt: '2024-07-25T15:06:54.451Z',
-            }
-    existingProduct.inventoryStatus = InventoryStatus.LOWSTOCK,
-    existingProduct.quantity = 6,
-    existingProduct.price = 300,
-    existingProduct.name ='Desk'
+        updatedAt: '2024-07-25T15:06:54.451Z',
+    };
+    existingProduct.code = 'fTH6frgvcv';
+    existingProduct.inventoryStatus = InventoryStatus.LOWSTOCK;
+    existingProduct.quantity = 6;
+    existingProduct.price = 300;
+    existingProduct.name ='Desk';
 
 
 const updatedProduct = { ...existingProduct, ...UpdateProductDto };
