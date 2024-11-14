@@ -2,24 +2,27 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from '../user/entities/user.entity';
-import { mockUserRepository } from '../../../../test/mock/userMockData';
 import { UnauthorizedException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {
   let service: AuthService;
+  let userService: Partial<Record<keyof UserService, jest.Mock>>;
+  let jwtService: Partial<Record<keyof JwtService, jest.Mock>>;
 
   beforeEach(async () => {
+    userService = {
+      findOneUser: jest.fn() as jest.Mock, // Ensure findOneUser is cast to a Jest mock function
+    };
+    jwtService = {
+      signAsync: jest.fn(), // Mocking signAsync correctly
+    };
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
-        UserService,
-        JwtService,
-        {
-          provide: getRepositoryToken(User),
-          useValue: mockUserRepository,
-        },
+        { provide: UserService, useValue: userService },
+        { provide: JwtService, useValue: jwtService },
       ],
     }).compile();
 
@@ -30,68 +33,38 @@ describe('AuthService', () => {
     expect(service).toBeDefined();
   });
 
-  let authService: AuthService;
-  let mockUserService: Partial<UserService>;
-  let mockJwtService: Partial<JwtService>;
+  describe('sign in', () => {
+    it('should be defined', () => {
+      expect(service.signIn).toBeDefined();
+    });
 
-  beforeEach(() => {
-      mockUserService = {
-          findOneUser: jest.fn(),
-      };
-      mockJwtService = {
-          signAsync: jest.fn(),
-      };
-      authService = new AuthService(mockUserService as UserService, mockJwtService as JwtService);
+    it('should return access_token if credentials are valid', async () => {
+      const user = { id: 1, email: 'test@example.com', password: 'hashedPassword' };
+      (userService.findOneUser as jest.Mock).mockResolvedValue(user);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true as never);
+      (jwtService.signAsync as jest.Mock).mockResolvedValue('testToken');
+  
+      const result = await service.signIn('test@example.com', 'password');
+  
+      expect(bcrypt.compare).toHaveBeenCalledWith('password', user.password);
+      expect(jwtService.signAsync).toHaveBeenCalledWith({ sub: user.id, email: user.email });
+      expect(result).toEqual({ access_token: 'testToken' });
+    });
+
+    it('should throw UnauthorizedException if user is not found', async () => {
+      (userService.findOneUser as jest.Mock).mockResolvedValue(null);
+  
+      await expect(service.signIn('test@example.com', 'password')).rejects.toThrow(UnauthorizedException);
+      expect(userService.findOneUser).toHaveBeenCalledWith('test@example.com');
+    });
+  
+    it('should throw UnauthorizedException if password is incorrect', async () => {
+      const user = { id: 1, email: 'test@example.com', password: 'hashedPassword' };
+      (userService.findOneUser as jest.Mock).mockResolvedValue(user);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(false as never);
+  
+      await expect(service.signIn('test@example.com', 'wrongPassword')).rejects.toThrow(UnauthorizedException);
+      expect(bcrypt.compare).toHaveBeenCalledWith('wrongPassword', user.password);
+    });
   });
-
-  it('should return an access token if email and password are correct', async () => {
-      const email = 'test@example.com';
-      const password = 'password123';
-      const user = { id: 1, email, password };
-      const token = 'mocked-access-token';
-
-      mockUserService.findOneUser = jest.fn().mockResolvedValue(user);
-      mockJwtService.signAsync = jest.fn().mockResolvedValue(token);
-
-      const result = await authService.signIn(email, password);
-
-      expect(mockUserService.findOneUser).toHaveBeenCalledWith(email);
-      expect(mockUserService.findOneUser).toHaveBeenCalledTimes(1);
-      expect(mockJwtService.signAsync).toHaveBeenCalledWith({ sub: user.id, email: user.email });
-      expect(mockJwtService.signAsync).toHaveBeenCalledTimes(1);
-      expect(result).toEqual({ access_token: token });
-  });
-
-  it('should throw UnauthorizedException if password is incorrect', async () => {
-      const email = 'test@example.com';
-      const incorrectPassword = 'wrongPassword';
-      const user = { id: 1, email, password: 'password123' };
-
-      mockUserService.findOneUser = jest.fn().mockResolvedValue(user);
-
-      await expect(authService.signIn(email, incorrectPassword)).rejects.toThrow(UnauthorizedException);
-      expect(mockUserService.findOneUser).toHaveBeenCalledWith(email);
-      expect(mockJwtService.signAsync).not.toHaveBeenCalled();
-  });
-
-  it('should throw UnauthorizedException if user is not found', async () => {
-      const email = 'nonexistent@example.com';
-      const password = 'password123';
-
-      mockUserService.findOneUser = jest.fn().mockResolvedValue(null);
-
-      await expect(authService.signIn(email, password)).rejects.toThrow(UnauthorizedException);
-      expect(mockUserService.findOneUser).toHaveBeenCalledWith(email);
-      expect(mockJwtService.signAsync).not.toHaveBeenCalled();
-  });
-
-  // describe('sign in', () => {
-  //   it('should be defined', () => {
-  //     expect(service.signIn).toBeDefined();
-  //   });
-
-    // it('should be defined', () => {
-    //   mockUserRepository.findOneUser.mockResolvedValue
-    // });
-  // });
 });

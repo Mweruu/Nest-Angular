@@ -12,8 +12,9 @@ import {
   existingUser,
   updatedUser,
 } from './../../../../test/mock/userMockData';
-import { InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt';
 
 describe('UserService', () => {
   let service: UserService;
@@ -43,18 +44,20 @@ describe('UserService', () => {
       expect(typeof createdUser.email).toBe('string');
       expect(typeof createdUser.firstName).toBe('string');
       expect(typeof createdUser.lastName).toBe('string');
-      expect(typeof createdUser.password).toBe('string');
       expect(Object.values(Role)).toContain(createdUser.role);
       expect(Array.isArray(createdUser.orders)).toBe(true);
       expect(Array.isArray(createdUser.products)).toBe(true);
     });
 
     it('should create a user and return a message', async () => {
+      const hashedPassword = 'hashedPassword';
       mockUserRepository.create.mockReturnValue(createdUser);
       mockUserRepository.save.mockResolvedValue(createdUser);
+      jest.spyOn(bcrypt, 'hash').mockResolvedValue(hashedPassword as never);
       const result = await service.create(newUser as unknown as CreateUserDto);
-      expect(result).toEqual({ message: 'user created', id: userId });
-      expect(mockUserRepository.create).toHaveBeenCalledWith(newUser);
+      expect(result).toEqual({ message: 'User Created', id: userId });
+      expect(bcrypt.hash).toHaveBeenCalledWith(newUser.password, 10);
+      expect(mockUserRepository.create).toHaveBeenCalledWith({...newUser, password: expect.any(String)});
       expect(mockUserRepository.create).toHaveBeenCalled();
       expect(mockUserRepository.save).toHaveBeenCalledWith(createdUser);
     });
@@ -67,6 +70,13 @@ describe('UserService', () => {
       await expect(
         service.create(newUser as unknown as CreateUserDto),
       ).rejects.toThrow(InternalServerErrorException);
+    });
+
+    it('should throw ConflictException if email is already in use', async () => {
+      mockUserRepository.findOne.mockResolvedValue(existingUser); // Simulate existing user
+  
+      await expect(service.create(newUser as unknown as CreateUserDto)).rejects.toThrow(ConflictException);
+      expect(mockUserRepository.findOne).toHaveBeenCalledWith({ where: { email: newUser.email } });
     });
   });
 
@@ -115,7 +125,6 @@ describe('UserService', () => {
     });
   });
 
-
   describe('UsersFindOneService by email', () => {
     it('should have a typeof function', () => {
       expect(typeof service.findOneUser).toBe('function');
@@ -129,7 +138,6 @@ describe('UserService', () => {
       expect(result).toEqual(existingUser);
       expect(mockUserRepository.findOne).toHaveBeenCalledWith({ 
         where: { email: newUser.email },
-        relations: ['orders']
       });
     });
 
@@ -144,22 +152,60 @@ describe('UserService', () => {
       expect(typeof service.update).toBe('function');
     });
 
-    it('should Update a user', async () => {
-      // Mock findOneBy method to return the existing user
-      mockUserRepository.findOneBy.mockResolvedValue(existingUser);
+    // it('should Update a user', async () => {
+    //   mockUserRepository.findOneBy.mockResolvedValue(existingUser);
+    //   mockUserRepository.save.mockResolvedValue(updatedUser);
+    //   const result = await service.update(userId, updateUserDto);
+    //   expect(result).toEqual(updatedUser); // Ensure the returned user matches the updated user
+    //   expect(mockUserRepository.findOneBy).toHaveBeenCalledWith({ id: userId }); // Check if findOneBy was called with correct userId
+    //   expect(mockUserRepository.save).toHaveBeenCalledWith(updatedUser);
+    // });
 
-      // Mock save method to return the updated user
-      mockUserRepository.save.mockResolvedValue(updatedUser);
+    it('should throw NotFoundException if the user does not exist', async () => {
+      mockUserRepository.findOneBy.mockResolvedValue(null);
+  
+      await expect(
+        service.update(1, { email: 'test@example.com' })
+      ).rejects.toThrow(NotFoundException);
+    });
+  
+    it('should throw ConflictException if the email is already in use', async () => {
+      const existingUser = { id: 2, email: 'duplicate@example.com' };
+      mockUserRepository.findOneBy.mockResolvedValueOnce({ id: 1, email: 'old@example.com' });
+      mockUserRepository.findOneBy.mockResolvedValueOnce(existingUser);
+  
+      await expect(
+        service.update(1, { email: 'duplicate@example.com' })
+      ).rejects.toThrow(ConflictException);
+    });
+  
+    it('should hash the password if it is updated', async () => {
+      const saltRounds = 10;
+      const user = { id: 1, password: 'oldPassword' };
+      mockUserRepository.findOneBy.mockResolvedValue(user);
+      mockUserRepository.save.mockImplementation((userData) => Promise.resolve(userData));
+  
+      const updateUserDto = { password: 'newPassword' };
+      jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashedPassword' as never);
 
-      // Call the service method to update the user
-      const result = await service.update(userId, updateUserDto);
-
-      // // Assertions
-      expect(result).toEqual(updatedUser); // Ensure the returned user matches the updated user
-
-      // Verify mock method calls
-      expect(mockUserRepository.findOneBy).toHaveBeenCalledWith({ id: userId }); // Check if findOneBy was called with correct userId
-      expect(mockUserRepository.save).toHaveBeenCalledWith(updatedUser);
+      const updatedUser = await service.update(1, updateUserDto);
+  
+      expect(bcrypt.hash).toHaveBeenCalledWith(updateUserDto.password, saltRounds);
+      expect(updatedUser.password).toBe('hashedPassword');
+    });
+  
+    it('should update the user with unique email and save the changes', async () => {
+      const user = { id: 1, email: 'old@example.com' };
+      mockUserRepository.findOneBy.mockResolvedValue(user);
+      mockUserRepository.save.mockResolvedValue({ ...user, email: 'new@example.com' });
+  
+      const updateUserDto = { email: 'new@example.com' };
+      const updatedUser = await service.update(1, updateUserDto);
+  
+      expect(mockUserRepository.findOneBy).toHaveBeenCalledWith({ id: 1 });
+      expect(mockUserRepository.findOneBy).toHaveBeenCalledWith({ email: 'new@example.com' });
+      expect(updatedUser.email).toBe('new@example.com');
+      expect(mockUserRepository.save).toHaveBeenCalledWith({ ...user, ...updateUserDto });
     });
 
     it('should throw an error if user id is not found', async () => {

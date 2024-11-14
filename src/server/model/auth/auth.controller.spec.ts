@@ -20,6 +20,7 @@ const mockUserRepository = {
 };
 describe('AuthController', () => {
   let controller: AuthController;
+  let authService: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -36,9 +37,29 @@ describe('AuthController', () => {
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
+    authService = module.get<AuthService>(AuthService);
+
   });
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
+  });
+
+  describe('', () => {
+    it('should be defined', () => {
+      expect(controller.signIn).toBeDefined();
+    });
+
+    it('should return token if authorised signin', async () => {
+      const user = { email: 'test@example.com', password: 'hashedPassword' };
+      const access_token = {
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyMywiZW1haWwiOiJqYW5ldHRAZ21haWwuY29tIiwiaWF0IjoxNzMxNTgyNzI5LCJleHAiOjE3MzE1ODI3ODl9.KlJ59PiGkSACmnpvFYD868v5aWahLxKC-UXeroRVS9I"
+      }
+      jest.spyOn(authService, 'signIn').mockResolvedValue(access_token);
+      const result = await controller.signIn(user);
+      expect(result).toEqual(access_token);
+      expect(authService.signIn).toHaveBeenCalledWith(user.email, user.password);
+      expect(authService.signIn).toHaveBeenCalled();
+    });
   });
 });

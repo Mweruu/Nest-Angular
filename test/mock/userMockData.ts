@@ -28,12 +28,12 @@ const mockDatabaseService = {
 const newUser = {
   firstName: 'Jane',
   lastName: 'Jane',
-  email: 'jane@example.com',
+  email: 'janeson@example.com',
   role: 'ADMIN',
   password: 'Mweru123',
   orders: [],
   products: [],
-  message: 'user created',
+  message: 'User Created',
 };
 
 const createdUser = {
@@ -88,7 +88,7 @@ const updateUserDto = {
   email: newUser.email,
   id: 1,
   role: Role.ADMIN,
-  password: newUser.password,
+  password: 'Mweru123',
   createdAt: '2024-07-25T15:06:54.451Z',
   updatedAt: '2024-07-25T15:06:54.451Z',
 };
@@ -98,9 +98,9 @@ const existingUser = new User();
 existingUser.id = userId;
 existingUser.firstName = newUser.firstName;
 existingUser.lastName = newUser.lastName;
-existingUser.email = newUser.email;
+existingUser.email = "janett@gmail.com";
 existingUser.role = Role.ADMIN;
-existingUser.password = newUser.password;
+existingUser.password = 'Mweru123';
 
 
 const updatedUser = { ...existingUser, ...updateUserDto };

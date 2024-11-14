@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty } from "class-validator";
 import { OrderProduct } from "../../order-product/entities/order-product.entity";
 import { User } from "../../user/entities/user.entity";
 import { OrderStatus } from "../entities/order.entity";
