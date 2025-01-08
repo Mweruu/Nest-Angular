@@ -5,22 +5,38 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { createdOrder, existingOrder, mockOrderRepository, newOrder, orderId, orders, updatedOrder } from '../../../../test/mock/orderMockData';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { OrderModule } from './order.module';
+import { plainToInstance } from 'class-transformer';
+import { validate } from 'class-validator';
+import { stringify } from 'querystring';
 
 describe('OrderController', () => {
   let controller: OrderController;
   let orderService: OrderService;
 
+  // beforeEach(async () => {
+  //   const module: TestingModule = await Test.createTestingModule({
+  //     controllers: [OrderController],
+  //     providers: [
+  //       OrderService,
+  //       {
+  //         provide: getRepositoryToken(Order),
+  //         useValue: mockOrderRepository,
+  //       },
+  //     ],
+  //   }).compile();
+
+  //   controller = module.get<OrderController>(OrderController);
+  //   orderService = module.get<OrderService>(OrderService);
+  // });
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [OrderController],
-      providers: [
-        OrderService,
-        {
-          provide: getRepositoryToken(Order),
-          useValue: mockOrderRepository,
-        },
-      ],
-    }).compile();
+      imports: [OrderModule], 
+    })
+      .overrideProvider(getRepositoryToken(Order))  
+      .useValue(mockOrderRepository)  
+      .compile();
 
     controller = module.get<OrderController>(OrderController);
     orderService = module.get<OrderService>(OrderService);
@@ -31,7 +47,7 @@ describe('OrderController', () => {
   });
 
   describe('create', () => {
-    it('should be defined', () => {
+    it('should be defined', async () => {
       expect(controller.create).toBeDefined();
     });
 

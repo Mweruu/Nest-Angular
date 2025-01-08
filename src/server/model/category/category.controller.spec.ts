@@ -4,22 +4,35 @@ import { CategoryService } from './category.service';
 import { Category } from './entities/category.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { categories, categoryId, existingCategory, mockCategoryRepository, newCategory, updatedCategory } from '../../../../test/mock/CategoryMockData';
+import { CategoryModule } from './category.module';
 
 describe('CategoryController', () => {
   let controller: CategoryController;
   let categoryService: CategoryService;
 
+  // beforeEach(async () => {
+  //   const module: TestingModule = await Test.createTestingModule({
+  //     controllers: [CategoryController],
+  //     providers: [
+  //       CategoryService,
+  //       {
+  //         provide: getRepositoryToken(Category),
+  //         useValue: mockCategoryRepository,
+  //       },
+  //     ],
+  //   }).compile();
+
+  //   controller = module.get<CategoryController>(CategoryController);
+  //   categoryService = module.get<CategoryService>(CategoryService);
+  // });
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [CategoryController],
-      providers: [
-        CategoryService,
-        {
-          provide: getRepositoryToken(Category),
-          useValue: mockCategoryRepository,
-        },
-      ],
-    }).compile();
+      imports: [CategoryModule],
+    })
+      .overrideProvider(getRepositoryToken(Category)) 
+      .useValue(mockCategoryRepository)
+      .compile();
 
     controller = module.get<CategoryController>(CategoryController);
     categoryService = module.get<CategoryService>(CategoryService);

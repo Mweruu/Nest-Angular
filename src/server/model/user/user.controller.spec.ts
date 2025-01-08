@@ -13,10 +13,8 @@ import {
   updatedUser,
   mockUserRepository,
 } from './../../../../test/mock/userMockData';
-// import { UserModule } from './user.module';
-// import { DataSource } from 'typeorm';
+import { UserModule } from './user.module';
 
-// const mockDataSource = {};
 
 describe('UserController', () => {
   let controller: UserController;
@@ -24,14 +22,11 @@ describe('UserController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      // imports: [UserModule, TypeOrmModule.forFeature([User]), ],
-      controllers: [UserController],
-      providers: [
-        UserService,
-        { provide: getRepositoryToken(User), useValue: mockUserRepository },
-        // { provide: DataSource, useValue: mockDataSource }
-      ],
-    }).compile();
+      imports: [UserModule], // UserModule will automatically include necessary providers
+    })
+      .overrideProvider(getRepositoryToken(User))  // Override the default repository with the mock
+      .useValue(mockUserRepository)  // Provide the mock repository
+      .compile();
 
     controller = module.get<UserController>(UserController);
     userService = module.get<UserService>(UserService);

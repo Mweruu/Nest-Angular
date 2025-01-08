@@ -12,6 +12,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 // import { AppDataSource } from '../../data-source';
 import * as bcrypt from 'bcrypt';
+import { InjectPinoLogger, PinoLogger } from 'nestjs-pino';
 
 
 @Injectable()
@@ -21,6 +22,8 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    // @InjectPinoLogger(UserService.name)
+    // private readonly logger2: PinoLogger
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<{ message: string; id?: number }> {
@@ -42,6 +45,7 @@ export class UserService {
    
       return { message: `User Created`, id: savedUser.id };
     } catch (error: any) {
+      this.logger.error(error)
       if (error instanceof ConflictException) {
         throw error; 
       }
@@ -54,7 +58,7 @@ export class UserService {
   async findAll(role?: 'INTERN' | 'ADMIN' | 'ENGINEER'): Promise<User[]> {
     let users;
     if (role) {
-      this.logger.debug(role);
+      this.logger.log("roleee", role);
       const options: FindManyOptions<User> = {
         where: {
           role: role as Role,
@@ -69,7 +73,7 @@ export class UserService {
   }
 
   async findOne(id: number): Promise<User | null> {
-    this.logger.debug('Doing something...');
+    this.logger.log("find one", id);
     const user = await this.userRepository.findOne({       
        where: { id },
       relations: ['orders'], 

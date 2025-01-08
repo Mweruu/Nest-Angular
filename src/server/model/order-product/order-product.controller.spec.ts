@@ -4,24 +4,38 @@ import { OrderProductService } from './order-product.service';
 import { OrderProduct } from './entities/order-product.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { existingOrderproduct, mockOrderProductRepository, newOrderProduct, orderProductId, orderProducts, updatedOrderProduct } from '../../../../test/mock/orderProductMockData';
+import { OrderProductModule } from './order-product.module';
 
 describe('OrderProductController', () => {
   let controller: OrderProductController;
   let orderProductService: OrderProductService;
 
 
+  // beforeEach(async () => {
+  //   const module: TestingModule = await Test.createTestingModule({
+  //     controllers: [OrderProductController],
+  //     providers: [
+  //       OrderProductService,
+  //       {
+  //         provide: getRepositoryToken(OrderProduct),
+  //         useValue: mockOrderProductRepository,
+  //       },
+  //     ],
+  //   }).compile();
+
+  //   controller = module.get<OrderProductController>(OrderProductController);
+  //   orderProductService = module.get<OrderProductService>(OrderProductService);
+  // });
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [OrderProductController],
-      providers: [
-        OrderProductService,
-        {
-          provide: getRepositoryToken(OrderProduct),
-          useValue: mockOrderProductRepository,
-        },
-      ],
-    }).compile();
+      imports: [OrderProductModule],
+    })
+      .overrideProvider(getRepositoryToken(OrderProduct)) 
+      .useValue(mockOrderProductRepository)  
+      .compile();
 
+    
     controller = module.get<OrderProductController>(OrderProductController);
     orderProductService = module.get<OrderProductService>(OrderProductService);
   });

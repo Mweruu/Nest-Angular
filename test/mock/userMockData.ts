@@ -28,7 +28,7 @@ const mockDatabaseService = {
 const newUser = {
   firstName: 'Jane',
   lastName: 'Jane',
-  email: 'janeson@example.com',
+  email: 'janso@example.com',
   role: 'ADMIN',
   password: 'Mweru123',
   orders: [],
@@ -98,7 +98,7 @@ const existingUser = new User();
 existingUser.id = userId;
 existingUser.firstName = newUser.firstName;
 existingUser.lastName = newUser.lastName;
-existingUser.email = "janett@gmail.com";
+existingUser.email = "janso@gmail.com";
 existingUser.role = Role.ADMIN;
 existingUser.password = 'Mweru123';
 

@@ -5,19 +5,33 @@ import { Product } from './entities/product.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { existingProduct, mockProductRepository, newProduct, productId, products, updatedProduct } from './../../../../test/mock/productMockData';
 import { CreateProductDto } from './dto/create-product.dto';
+import { ProductsModule } from './products.module';
 
 describe('ProductsController', () => {
   let controller: ProductsController;
   let productsService:ProductsService;
 
+  // beforeEach(async () => {
+  //   const module: TestingModule = await Test.createTestingModule({
+  //     // imports:[ ProductsModule ],
+  //     controllers: [ProductsController],
+  //     providers: [
+  //       ProductsService,
+  //       { provide: getRepositoryToken(Product), useValue: mockProductRepository },
+  //     ],
+  //   }).compile();
+
+  //   controller = module.get<ProductsController>(ProductsController);
+  //   productsService = module.get<ProductsService>(ProductsService);
+  // });
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [ProductsController],
-      providers: [
-        ProductsService,
-        { provide: getRepositoryToken(Product), useValue: mockProductRepository },
-      ],
-    }).compile();
+      imports: [ProductsModule],
+    })
+      .overrideProvider(getRepositoryToken(Product))
+      .useValue(mockProductRepository)  
+      .compile();
 
     controller = module.get<ProductsController>(ProductsController);
     productsService = module.get<ProductsService>(ProductsService);

@@ -228,8 +228,8 @@ describe('UserService', () => {
     it('should throw a NotFoundException when the entity does not exist', async () => {
       mockUserRepository.delete.mockResolvedValue({ affected: 0 });
       // await expect(service.remove(1)).rejects.toThrow(NotFoundException);
-      await expect(service.remove(1)).rejects.toBeInstanceOf(NotFoundException);
-      expect(mockUserRepository.delete).toHaveBeenCalledWith(1);
+      await expect(service.remove(userId)).rejects.toBeInstanceOf(NotFoundException);
+      expect(mockUserRepository.delete).toHaveBeenCalledWith(userId);
     });
   });
 });

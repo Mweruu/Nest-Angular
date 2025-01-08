@@ -13,6 +13,9 @@ import { OrderProduct } from './model/order-product/entities/order-product.entit
 import { Order } from './model/order/entities/order.entity';
 import { Product } from './model/products/entities/product.entity';
 import { User } from './model/user/entities/user.entity';
+import { LoggerModule } from 'nestjs-pino';
+import { Auth } from './model/auth/entities/auth.entity';
+
 
 @Module({
   imports: [
@@ -23,11 +26,11 @@ import { User } from './model/user/entities/user.entity';
       username: 'root',
       password: 'admin',
       database: 'test',
-      // entities: [],
-     entities: [User, Order, OrderProduct, Product, Category],
+      entities: [User, Order, OrderProduct, Product, Category, Auth],
       synchronize: true,
       logging: false,
     }),
+    TypeOrmModule.forFeature([User, Auth, Category, OrderProduct, Order, Product]),  
     // TypeOrmModule.forRootAsync({}),
     UserModule,
     AuthModule,
@@ -35,6 +38,16 @@ import { User } from './model/user/entities/user.entity';
     CategoryModule,
     ProductsModule,
     OrderProductModule,
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            singleLine: true,
+          },
+        },
+      },
+    })
   ],
   controllers: [AppController],
   providers: [AppService],

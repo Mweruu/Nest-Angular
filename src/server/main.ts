@@ -2,12 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { Logger } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'log', 'debug'],
+    cors: true,
   });
   app.useGlobalPipes(new ValidationPipe());
+  app.useLogger(app.get(Logger));
   const document = SwaggerModule.createDocument(
     app,
     new DocumentBuilder()
